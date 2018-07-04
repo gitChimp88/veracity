@@ -1,0 +1,8 @@
+<% if (!user) { %>
+  <h1>Veracity Authentication Demo</h1>
+  <a href="/login">Login</a>
+<% } else { %>
+  <h1>Veracity Authentication Demo</h1>
+  <p>Hello <strong><% user.displayName %></strong></p>
+  <a href="/me">View my profile</a> - <a href="/services">View my services</a> - <a href="/logout">Logout</a>
+<% } %>
