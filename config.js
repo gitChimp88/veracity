@@ -16,7 +16,7 @@ const databaseConfig = {
 // Configuration for our server
 const serverConfig = {
   // The port our application will be served from. This can be any valid port number as long as it is not in use.
-  port: 3000,
+  port: 3001,
 
   // The path where static assets like client side JavaScript are stored.
   staticPath: './client',
@@ -47,7 +47,7 @@ const authConfig = {
     clientID,
     clientSecret,
 
-    responseType: 'code',
+    responseType: 'id_token',
     responseMode: 'form_post', // How the authentication server will respond back when authentication is complete. 'form_post' is required by Azure B2C.
     redirectUrl: redirectUrl, // The url where authentication data is returned from B2C/ADFS. This MUST match the configured return url from when the application was registered.
     allowHttpForRedirectUrl: false, // Prevent using HTTP for redirects. This forces use of HTTPS for all urls and is the safer method.
