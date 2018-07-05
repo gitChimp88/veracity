@@ -1,7 +1,7 @@
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // This file sets up our server and expressjs instance.
 // It does not contain code specific to the authentication and api calls. See start.js
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 const fs = require('fs'); // Used to read the index.html file from disk.
 const path = require('path'); // Used to resolve paths properly.
@@ -11,7 +11,7 @@ const express = require('express'); // We use ExpressJS to control our HTTPS ser
 const morgan = require('morgan'); // Used to log all request to output.
 const cheerio = require('cheerio'); // Used to parse the index.html file and write state JSON to it.
 
-const {serverConfig} = require('./config.js'); // Load only server config from our config file.
+const { serverConfig } = require('./config.js'); // Load only server config from our config file.
 
 
 // Resolve absolute paths to the files we need.

@@ -2,12 +2,12 @@
   "name": "@veracity/generator-veracity",
   "version": "0.1.9",
   "description": "Create Veracity applications in a few sec",
-  "homepage": "https://developer.veracity.com",
+  "homepage": "https://deciveloper.veracity.com",
   "author": "Brede Børhaug <brede.borhaug@dnvgl.com>; Wang, Ming Derek <Ming.Derek.Wang@dnvgl.com>(https://developer.veracity.com)",
   "files": [
     "generators"
   ],
-  "main": "generators/index.js",
+  "main": "generators/index",
   "keywords": [
     "Veracity",
     "DNV GL",
@@ -35,6 +35,7 @@
     "yeoman-test": "^1.7.0"
   },
   "dependencies": {
+    "babel-eslint": "^8.2.5",
     "chalk": "^2.1.0",
     "cheerio": "^1.0.0-rc.2",
     "eslint": "^5.0.1",

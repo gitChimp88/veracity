@@ -1,30 +1,31 @@
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // This file configures the server to support authentication for Veracity APIs
 // and requests the access token needed to perform requests.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // Import our server setup code so that we can configure authentication on our server instance.
 const { app, readIndexFileAndSetState, start } = require('./server.js');
+
 // Fetch authentication configuration
 const { authConfig } = require('./config.js');
 
 // ExpressSession is used to store session info in memory so the user does not have to re-authenticate on every request.
 const expressSession = require('express-session');
-// BodyParser is specifically used to parse the POST response from Azure B2C/ADFS.
-const bodyParser = require('body-parser');
-// PassportJs handles authentication for us using the passport-azure-ad plug-in.
-const passport = require('passport');
+
 // Get the strategy we use to authenticate with Azure B2C and ADFS (it handles both for us)
 const OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
-// Helper library for performing http requests from node.js. Used to query the Veracity API from the server on behalf of the user.
-const request = require('request-promise-native');
+
+// PassportJs handles authentication for us using the passport-azure-ad plug-in.
+const passport = require('passport');
 
 const index = require('./routes/index');
-//-----------------------------------------------------------------------------
-// Set up our session manager that will use in-memory storage for sessions. You should not use in-memory storage in production.
-// This must be done before we attach the passport middleware or passport will be unable to use sessions
-// For a full description of these options see https://github.com/expressjs/session
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+/* Set up our session manager that will use in-memory storage for sessions. 
+You should not use in-memory storage in production. This must be done before 
+we attach the passport middleware or passport will be unable to use sessions
+For a full description of these options see 
+https://github.com/expressjs/session */
+// -----------------------------------------------------------------------------
 app.use(
   expressSession({
     secret: 'session secret', // The key phrase used to sign session cookies.
@@ -36,10 +37,10 @@ app.use(
   })
 );
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Now we can set up our authentication details
-//-----------------------------------------------------------------------------
-const verifier = function(
+// -----------------------------------------------------------------------------
+const verifier = function (
   iss,
   sub,
   profile,
@@ -90,7 +91,7 @@ app.get('*', (req, res, next) => {
   next(err);
 });
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Finally start our server by calling the start function from server.js
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 start();

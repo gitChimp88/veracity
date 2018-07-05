@@ -1,7 +1,14 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-
 const router = express.Router();
+
+// Fetch authentication configuration
+const { authConfig } = require('./config.js');
+// BodyParser is specifically used to parse the POST response from Azure B2C/ADFS.
+const bodyParser = require('body-parser');
+// PassportJs handles authentication for us using the passport-azure-ad plug-in.
+const passport = require('passport');
+// Helper library for performing http requests from node.js. Used to query the Veracity API from the server on behalf of the user.
+const request = require('request-promise-native');
 
 const heroesService = require('../controllers/hero-service');
 
@@ -36,10 +43,10 @@ const ensureSignInPolicyQueryParameter = (req, res, next) => {
   next();
 };
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Now that all our helper and initialization stuff is ready we can set up the
 // routes our app will respond to.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Our home route. Returns index.html and sets the user state if the user
 // is logged in (req.user will be undefined of not authenticated).
 router.get('/', (req, res) => {
@@ -65,7 +72,7 @@ router.post(
   },
   (req, res) => {
     // Finally we redirect back to the front page, but this time the req.user
-    // parameter will be populated eecause we are signed in.
+    // parameter will be populated because we are signed in.
     res.redirect('/');
   }
 );
@@ -91,7 +98,7 @@ router.get(
   (req, res, next) => {
     // Overview step 2
     authenticator(res)(req, res, next); // Add our authenticator middleware helper (passport) to handle the authentication.
-    console.log(`response back from Veracity/AD B2C = `, res);
+    console.log('response back from Veracity/AD B2C = ', res);
   },
   (req, res) => {
     res.redirect('/error'); // This redirect will never be used unless something failed. The return-url when login is complete is configured as part of the application registration.
