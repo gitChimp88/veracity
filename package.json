@@ -60,7 +60,7 @@
     "url": "https://github.com/veracity/generator-veracity/issues"
   },
   "scripts": { 
-      "client": "cd ../react-cosmosdb && yarn start",
+      "client": "cd ../react-cosmosdb && HTTPS=true yarn start",
       "server": "nodemon start",
       "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   }
