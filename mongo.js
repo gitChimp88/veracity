@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const { authConfig } = require('./config.js');
+const { databaseConfig } = require('./config.js');
 
-const cosmosConnectString =
+const cosmosConnectStringHardCoded =
   'mongodb://azurecosmosdbaccountevan:sA4vaugVTvQbTCCvscsACwRmVTd0ReW6d4b8BaCTb61sOmadCsjDa4UcUaRATeEl2tWOYuXfHZJ7qkWvBXCOaQ==@azurecosmosdbaccountevan.documents.azure.com:10255/?ssl=true&replicaSet=globaldb';
 mongoose.Promise = global.Promise;
 
@@ -11,8 +11,8 @@ mongoose.Promise = global.Promise;
   return mongoose.connect(mongoUri, { auth: { user: env.dbName, pass: env.key }});
 } */
 
-function connect() {
-  return mongoose.connect(cosmosConnectString);
+function connect () {
+  return mongoose.connect(databaseConfig.cosmosConnectString);
 }
 
 module.exports = {

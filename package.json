@@ -58,5 +58,10 @@
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/veracity/generator-veracity/issues"
+  },
+  "scripts": { 
+      "client": "cd ../react-cosmosdb && yarn start",
+      "server": "nodemon start",
+      "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   }
 }

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Fetch authentication configuration
-const { authConfig } = require('./config.js');
+const { authConfig } = require('../config.js');
 // BodyParser is specifically used to parse the POST response from Azure B2C/ADFS.
 const bodyParser = require('body-parser');
 // PassportJs handles authentication for us using the passport-azure-ad plug-in.
@@ -55,7 +55,6 @@ router.get('/', (req, res) => {
 });
 
 // This route is where we retrieve the authentication information posted
-// back from Azure B2C/ADFS.
 // To perform the necessary steps it needs to parse post data as well as
 // sign in correctly. This is done using the body-parser middleware.
 router.post('/', bodyParser.urlencoded({ extended: true }));
