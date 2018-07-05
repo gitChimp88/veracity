@@ -91,8 +91,7 @@ router.post(
 // request to ADFS in order to perform authentication. If the user logs in
 // correctly Azure B2C will return them back to us with several pieces of
 // information including the user identity.
-router.get(
-  '/login',
+router.get('/login',
   ensureSignInPolicyQueryParameter,
   (req, res, next) => {
     // Overview step 2
@@ -122,9 +121,9 @@ router.get('/logoutadfs', (req, res, next) => {
   res.redirect(authConfig.destroyADFSSessionUrl); // Finally redirect the user to the ADFS log out page.
 });
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Set up some example routes to test performing requests to the Veracity API.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // This route returns information about the current user by calling the Service API endpoint /my/profile
 // Note that we chain our handlers with 'ensureAuthenticated' in order to ensure the user has signed in.
 // If the user has not signed in that function will redirect them to the login page automatically.

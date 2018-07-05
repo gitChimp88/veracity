@@ -84,9 +84,10 @@ app.use(passport.initialize()); // Register passport with our expressjs instance
 app.use(passport.session()); // We are using sessions to persist the login and must therefore also register the session middleware from passport.
 
 // Routes are here!
+app.use('/', index);
 app.use('/api', index);
 app.get('*', (req, res, next) => {
-  const err = new Error('Four OHH four!');
+  const err = new Error(`Four OHH four! ${req.originalUrl}`);
   err.status = 404;
   next(err);
 });

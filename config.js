@@ -51,6 +51,7 @@ const authConfig = {
     responseMode: 'form_post', // How the authentication server will respond back when authentication is complete. 'form_post' is required by Azure B2C.
     redirectUrl: redirectUrl, // The url where authentication data is returned from B2C/ADFS. This MUST match the configured return url from when the application was registered.
     allowHttpForRedirectUrl: false, // Prevent using HTTP for redirects. This forces use of HTTPS for all urls and is the safer method.
+    loggingNoPII: false, // loggingNoPII means not logging anything related to personal identification information, turning it to false will give you the full detail of the error)
 
     // Which scopes we want to retrieve.
     scope: [

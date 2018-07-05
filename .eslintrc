@@ -19,7 +19,8 @@
     "space-infix-ops": 2,
     "spaced-comment": [2, "always"],
     "arrow-spacing": 2,
-    "no-console": 0
+    "no-console": 0,
+    "no-unused-vars": ["error", { "argsIgnorePattern": "next" }]
   },
   "globals": {
   }

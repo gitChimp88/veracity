@@ -4,7 +4,7 @@ const ReadPreference = require('mongodb').ReadPreference;
 
 require('../mongo').connect();
 
-function get(req, res) {
+function get (req, res) {
   const docquery = Hero.find({}).read(ReadPreference.NEAREST);
   docquery
     .exec()
@@ -16,7 +16,7 @@ function get(req, res) {
     });
 }
 
-function create(req, res) {
+function create (req, res) {
   const { id, name, saying } = req.body;
 
   const hero = new Hero({ id, name, saying });
@@ -30,7 +30,7 @@ function create(req, res) {
     });
 }
 
-function update(req, res) {
+function update (req, res) {
   const { id, name, saying } = req.body;
 
   Hero.findOne({ id })
@@ -44,7 +44,7 @@ function update(req, res) {
     });
 }
 
-function destroy(req, res) {
+function destroy (req, res) {
   const { id } = req.params;
 
   Hero.findOneAndRemove({ id })
