@@ -32,7 +32,7 @@ const serverConfig = {
 };
 
 //
-// Authentication  for configuration and Azure/configuration: configuratio      configuration  configuration
+// Authentication  for configuration and Azure/configuration: configuration     
 //
 
 // Normally you only need to alter these options:
@@ -40,6 +40,8 @@ const serverConfig = {
 const clientID = 'b128d927-b7bc-4559-ad99-8290aae7beb8'; // Your application ID that you get from https://developer.veracity.com when you registered your application.
 const clientSecret = 'n]4e|jhs1lP0aJIADt5rdvDa/'; // Your application secret that you received from https://developer.veracity.com when you registered your application.
 const redirectUrl = 'https://localhost:3000/'; // The redirect-url you registered with your application. Configure in Developer portal
+// const redirectUrl = 'https://192.168.1.51:3000'; // The redirect-url you registered with your application. Configure in Developer portal
+
 
 //
 const tenantID = 'a68572e3-63ce-4bc1-acdc-b64943502e9d'; // Veracity tenant ID

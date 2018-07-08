@@ -23,6 +23,8 @@ if (!fs.existsSync(keyFullPath)) throw new Error(`Unable to resolve private key 
 if (!fs.existsSync(certFullPath)) throw new Error(`Unable to resolve certificate file. Use 'npm run gencert' to generate this file (requires openssl). Expected location "${certFullPath}"`);
 
 const app = express(); // Initialize an expressjs application instance.
+// TODO: add productiion scale session store (Azure Tables?)
+app.set('trust proxy', 1); // trust first proxy
 const server = https.createServer({
   // Pass our private key and certificate to the server.
   key: fs.readFileSync(keyFullPath),
