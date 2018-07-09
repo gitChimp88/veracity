@@ -8,7 +8,7 @@ const passport = require('passport');
 // Finally we create some helper functions to simplify routing.
 // Helper that will perform the authentication against B2C/ADFS.
 exports.authenticator = res => {
-  console.log( 'authenticator ran!! res = ', res);
+  // console.log( 'authenticator ran!! res = ', res);
   // Construct middleware that can perform authentication
   return passport.authenticate('azuread-openidconnect', {
     response: res,
@@ -19,7 +19,7 @@ exports.authenticator = res => {
 // Helper middleware that will verify that the user is authenticated and if not
 // perform authentication. Its the same as: req.session.passport.user !== undefined
 exports.ensureAuthenticated = (req, res, next) => {
-  console.log( 'ensureAuthenticated ran!! req = ', req, 'res = ', res)
+  // console.log( 'ensureAuthenticated ran!! req = ', req, 'res = ', res)
   console.log('req.isAuthenticated() = ', req.isAuthenticated());
   if (req.isAuthenticated()) {
     // User is authenticated, simply pass control to the next route handler.

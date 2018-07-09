@@ -30,6 +30,8 @@ const api = require('./routes/api');
 
 const helpers = require('./helpers.js');
 
+app.use(bodyParser.json());
+
 // Connect db
 require('./mongo').connect();
 
@@ -111,12 +113,14 @@ app.use(passport.session());
 // Now that all our helper and initialization stuff is ready we can set up the
 // routes our app will respond to.
 // -----------------------------------------------------------------------------
+
+// enable CORS
 app.use(function (req, res, next) { 
   res.header('Access-Control-Allow-Origin', '*'); 
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'); next(); 
 });
-
 app.get('/robots.txt', function (req, res) {
+
   res.type('text/plain');
   res.send('User-agent: *\nDisallow: /');
 });
@@ -124,7 +128,7 @@ app.get('/robots.txt', function (req, res) {
 
 /* Our home route. Returns index.html and sets the user state if 
 the user is logged in (req.user will be undefined of not authenticated). */
-app.get('/checkifloggedin', (req, res) => {
+app.get('/myauth/checkifloggedin', (req, res) => {
   // Render the index view (passing it an object with user data)
   // res.render('index', { user: req.user });
   console.log('req.user = ', req.user);
@@ -132,10 +136,18 @@ app.get('/checkifloggedin', (req, res) => {
     { user: req.user });
 });
 
+app.get('/', (req, res) => {
+  // Render the index view (passing it an object with user data)
+  // res.render('index', { user: req.user });
+  console.log('req.user = ', req.user);
+  res.send(
+    { user: req.user });
+});
 // This route is where we retrieve the authentication information posted
-// To perform the necessary steps it needsj to parse post data as well as
+// To perform the necessary steps it needs to parse post data as well as
 // sign in correctly. This is done using the body-parser middleware.
-app.post('/', bodyParser.urlencoded({ extended: true }));
+// bodyParser.urlencoded is  // to support URL-encoded bodies
+app.post('/', bodyParser.urlencoded({ extended: true })); 
 
 // After registering the body-parser middleware for this specific route
 // (namely 'POST /'). We can apply our authenticator to read the POSTed
@@ -144,12 +156,13 @@ app.post('/', bodyParser.urlencoded({ extended: true }));
 // every request in order to verify the user again. TODO: saved
 app.post('/', (req, res, next) => {
     // Overview step 3
+    console.log('req.user = ', req);
     helpers.authenticator(res)(req, res, next);
   },
   (req, res) => {
     // Finally we redirect back to the front page, but this time the req.user
     // parameter will be populated because we are signed in.
-    res.redirect('/');
+    res.redirect('https://localhost:3000');
   }
 );
 
@@ -178,6 +191,7 @@ app.get('/login', helpers.ensureSignInPolicyQueryParameter,
     console.log('response back from Veracity/AD B2C = ', res);
   },
   (req, res) => {
+    console.log('we got to this point!!!')
     /* The return-url when login is complete is configured as part of the 
     application registration. */
     res.redirect('/error'); // This redirect will never be used unless something failed. 
@@ -214,7 +228,7 @@ app.get('/logoutadfs', (req, res, next) => {
 // Set up some example routes to test performing requests to the Veracity API.
 // -----------------------------------------------------------------------------
 
-app.get('/dashboard', (req, res) => {
+app.get('/api/dashboard', (req, res) => {
   res.status(200).json({
     message: "You're authorized to see this secret message.",
     // user values passed through from auth middleware
@@ -227,7 +241,7 @@ app.get('/dashboard', (req, res) => {
 API endpoint /my/profile. Note that we chain our handlers with 'ensureAuthenticated' 
 in order to ensure the user has signed in. If the user has not signed in that 
 function will redirect them to the login page automatically. */
-app.get('/me', helpers.ensureAuthenticated, (req, res) => {
+app.get('api/me', helpers.ensureAuthenticated, (req, res) => {
   // Build the complete url for our request.
   const url = authConfig.veracityApiEndpoint + '/my/profile'; 
   request({
@@ -239,7 +253,7 @@ app.get('/me', helpers.ensureAuthenticated, (req, res) => {
     }
   })
     .then(result => {
-      res.render('me', {
+      res.render('api/me', {
         // Render the result of the call as readable JSON.
         result: JSON.stringify(JSON.parse(result), null, 2) // We do parse->stringify just to make it a bit more readable.
       });
@@ -253,7 +267,7 @@ app.get('/me', helpers.ensureAuthenticated, (req, res) => {
 });
 
 // experiment with requiring authentication before main route
-app.get('/me', helpers.ensureAuthenticated, (req, res) => {
+app.get('/api/me', helpers.ensureAuthenticated, (req, res) => {
   console.log(`From app.get('me'... end point, the response was ${res}`);
   const url = authConfig.veracityApiEndpoint + '/my/profile'; // Build the complete url for our request.
   request({
@@ -265,7 +279,7 @@ app.get('/me', helpers.ensureAuthenticated, (req, res) => {
     }
   })
     .then(result => {
-      res.render('me', {
+      res.render('api/me', {
         // Render the result of the call as readable JSON.
         result: JSON.stringify(JSON.parse(result), null, 2) // We do parse->stringify just to make it a bit more readable.
       });
@@ -279,7 +293,7 @@ app.get('/me', helpers.ensureAuthenticated, (req, res) => {
 });
 
 // This route returns information about my services
-app.get('/services', helpers.ensureAuthenticated, (req, res) => {
+app.get('/api/services', helpers.ensureAuthenticated, (req, res) => {
   const url = authConfig.veracityApiEndpoint + '/my/services'; // Build the complete url for our request.
   request({
     // Configure and initiate the request.
@@ -290,7 +304,7 @@ app.get('/services', helpers.ensureAuthenticated, (req, res) => {
     }
   })
     .then(result => {
-      res.render('me', {
+      res.render('/api/me', {
         // Render the result of the call as readable JSON.
         result: JSON.stringify(JSON.parse(result), null, 2) // We do parse->stringify just to make it a bit more readable.
       });
@@ -304,7 +318,7 @@ app.get('/services', helpers.ensureAuthenticated, (req, res) => {
 });
 
 
-app.use('/api', helpers.ensureAuthenticated, api);
+app.use('/api1', helpers.ensureAuthenticated, api);
 
 app.get('*', (req, res, next) => {
   const err = new Error(`Four OHH four! req.originalUrl = ${req.originalUrl}\n`);
