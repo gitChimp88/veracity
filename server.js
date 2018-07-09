@@ -12,7 +12,7 @@ const morgan = require('morgan'); // Used to log all request to output.
 const cheerio = require('cheerio'); // Used to parse the index.html file and write state JSON to it.
 
 const { serverConfig } = require('./config.js'); // Load only server config from our config file.
-
+const bodyParser = require('body-parser');
 
 // Resolve absolute paths to the files we need.
 const keyFullPath = path.resolve(__dirname, serverConfig.keyFile);
@@ -23,7 +23,16 @@ if (!fs.existsSync(keyFullPath)) throw new Error(`Unable to resolve private key 
 if (!fs.existsSync(certFullPath)) throw new Error(`Unable to resolve certificate file. Use 'npm run gencert' to generate this file (requires openssl). Expected location "${certFullPath}"`);
 
 const app = express(); // Initialize an expressjs application instance.
+/* var expressWinston = require('express-winston');
+var winston = require('winston'); // for transports.Console */
 // TODO: add productiion scale session store (Azure Tables?)
+// TODO: experiment to fix 'Cannot POST /' error
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'static')));
+
+
 app.set('trust proxy', 1); // trust first proxy
 const server = https.createServer({
   // Pass our private key and certificate to the server.

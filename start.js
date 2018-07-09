@@ -30,8 +30,6 @@ const api = require('./routes/api');
 
 const helpers = require('./helpers.js');
 
-app.use(bodyParser.json());
-
 // Connect db
 require('./mongo').connect();
 
@@ -119,6 +117,18 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*'); 
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'); next(); 
 });
+ // express-winston logger makes sense BEFORE the router
+/* app.use(expressWinston.logger({
+transports: [
+  new winston.transports.Console({
+    json: true,
+    colorize: true
+  })
+]
+})); */
+
+
+
 app.get('/robots.txt', function (req, res) {
 
   res.type('text/plain');
@@ -189,9 +199,10 @@ app.get('/login', helpers.ensureSignInPolicyQueryParameter,
     to handle the authentication. */
     helpers.authenticator(res)(req, res, next); 
     console.log('response back from Veracity/AD B2C = ', res);
+    console.log('after helpers.authenticator(), res.user = ', res.user);
   },
   (req, res) => {
-    console.log('we got to this point!!!')
+    console.log('we got to this point!!!');
     /* The return-url when login is complete is configured as part of the 
     application registration. */
     res.redirect('/error'); // This redirect will never be used unless something failed. 
@@ -321,10 +332,22 @@ app.get('/api/services', helpers.ensureAuthenticated, (req, res) => {
 app.use('/api1', helpers.ensureAuthenticated, api);
 
 app.get('*', (req, res, next) => {
+  res.sendFile('/public/index.html');
   const err = new Error(`Four OHH four! req.originalUrl = ${req.originalUrl}\n`);
   err.status = 404;
   next(err);
 });
+
+// express-winston errorLogger makes sense AFTER the router.
+/* app.use(expressWinston.errorLogger({
+  transports: [
+    new winston.transports.Console({
+      json: true,
+      colorize: true
+    })
+  ]
+})); */
+
 
 // -----------------------------------------------------------------------------
 // Finally start our server by calling the start function from server.js
