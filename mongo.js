@@ -3,6 +3,9 @@ const { databaseConfig } = require('./config.js');
 
 const cosmosConnectStringHardCoded =
   'mongodb://azurecosmosdbaccountevan:sA4vaugVTvQbTCCvscsACwRmVTd0ReW6d4b8BaCTb61sOmadCsjDa4UcUaRATeEl2tWOYuXfHZJ7qkWvBXCOaQ==@azurecosmosdbaccountevan.documents.azure.com:10255/?ssl=true&replicaSet=globaldb';
+
+const dbURL = databaseConfig.cosmosConnectString;
+
 mongoose.Promise = global.Promise;
 // mongoose.set(‘debug’, true);
 // Const mongoUri = `mongodb://${env.dbName}.documents.azure.com:${env.cosmosPort}/?ssl=true`;
@@ -12,15 +15,20 @@ mongoose.Promise = global.Promise;
 } */
 
 function connect () {
-  return mongoose.connect(databaseConfig.cosmosConnectString);
+  return mongoose.connect(dbURL);
 }
 
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, '# Mongo DB: connection error:'));
-// db.once('open', function (callback) { 
-//   console.log('# Mongo DB: Connected to server');
-// });
-
+db.on('error', function (err) {
+  console.error('There was a db connection error');
+  return  console.error(err.message);
+});
+db.once('connected', function () {
+  return console.log('Successfully connected to ' + dbURL);
+});
+db.once('disconnected', function () {
+  return console.error('Successfully disconnected from ' + dbURL);
+});
 module.exports = {
   connect,
   mongoose

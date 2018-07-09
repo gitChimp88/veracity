@@ -30,6 +30,10 @@ const api = require('./routes/api');
 
 const helpers = require('./helpers.js');
 
+// Connect db
+require('./mongo').connect();
+
+
 // TODO: put authorization code below in its own middleware
 // -----------------------------------------------------------------------------
 /* Set up our session manager that will use in-memory storage for sessions. 
@@ -107,6 +111,10 @@ app.use(passport.session());
 // Now that all our helper and initialization stuff is ready we can set up the
 // routes our app will respond to.
 // -----------------------------------------------------------------------------
+app.use(function (req, res, next) { 
+  res.header('Access-Control-Allow-Origin', '*'); 
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'); next(); 
+});
 
 app.get('/robots.txt', function (req, res) {
   res.type('text/plain');
@@ -116,14 +124,15 @@ app.get('/robots.txt', function (req, res) {
 
 /* Our home route. Returns index.html and sets the user state if 
 the user is logged in (req.user will be undefined of not authenticated). */
-app.get('/', (req, res) => {
+app.get('/checkifloggedin', (req, res) => {
   // Render the index view (passing it an object with user data)
   // res.render('index', { user: req.user });
-  console.log('response from app.get(\'/ssrender\'...) = ', res);
- res.send(res);
+  console.log('req.user = ', req.user);
+  res.send(
+    { user: req.user });
 });
 
-// This route is wheke we retrieve the authentication information posted
+// This route is where we retrieve the authentication information posted
 // To perform the necessary steps it needsj to parse post data as well as
 // sign in correctly. This is done using the body-parser middleware.
 app.post('/', bodyParser.urlencoded({ extended: true }));
@@ -143,6 +152,8 @@ app.post('/', (req, res, next) => {
     res.redirect('/');
   }
 );
+
+
 // At this point we can use the information Azure B2C returned to us to
 // perform requests to the Veracity API provided we requested the information
 // to begin with. Every time the user performs an action that requires a call
@@ -202,6 +213,16 @@ app.get('/logoutadfs', (req, res, next) => {
 // -----------------------------------------------------------------------------
 // Set up some example routes to test performing requests to the Veracity API.
 // -----------------------------------------------------------------------------
+
+app.get('/dashboard', (req, res) => {
+  res.status(200).json({
+    message: "You're authorized to see this secret message.",
+    // user values passed through from auth middleware
+    user: req.user
+  });
+});
+
+
 /* This route returns information about the current user by calling the Service 
 API endpoint /my/profile. Note that we chain our handlers with 'ensureAuthenticated' 
 in order to ensure the user has signed in. If the user has not signed in that 
