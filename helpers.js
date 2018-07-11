@@ -13,7 +13,7 @@ exports.authenticator = res => {
   return passport.authenticate('azuread-openidconnect', {
     response: res,
     failureRedirect: '/error', // Where to route the user if the authentication fails
-    failureFlash: true  
+    failureFlash: true,
   });
 };
 // Helper middleware that will verify that the user is authenticated and if not

@@ -13,7 +13,7 @@ const cheerio = require('cheerio'); // Used to parse the index.html file and wri
 
 const { serverConfig } = require('./config.js'); // Load only server config from our config file.
 const bodyParser = require('body-parser');
-
+const flash = require('connect-flash');
 // Resolve absolute paths to the files we need.
 const keyFullPath = path.resolve(__dirname, serverConfig.keyFile);
 const certFullPath = path.resolve(__dirname, serverConfig.certFile);
@@ -25,13 +25,14 @@ if (!fs.existsSync(certFullPath)) throw new Error(`Unable to resolve certificate
 const app = express(); // Initialize an expressjs application instance.
 /* var expressWinston = require('express-winston');
 var winston = require('winston'); // for transports.Console */
-// TODO: add productiion scale session store (Azure Tables?)
-// TODO: experiment to fix 'Cannot POST /' error
+// TODO: add productiion scale session store (Azure Tables, mongo?)
+// EXPERIMENT: experiment to fix 'Cannot POST /' error
+// app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'static')));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'static')));
-
+app.use(flash());
 
 app.set('trust proxy', 1); // trust first proxy
 const server = https.createServer({
@@ -39,13 +40,18 @@ const server = https.createServer({
   key: fs.readFileSync(keyFullPath),
   cert: fs.readFileSync(certFullPath)
 }, app); // Initialize an HTTPS server and set our app instance as the callback function for requests.
+
+// We'll be using ejs as our template engine. Configure expressjs to use it.
+app.set('views', path.resolve(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 // Connect the morgan middleware to express so it can log requests.
 app.use(morgan('dev'));
 
 
 // Create this handy function that we can call to start up our server once we have configured the stuff we need in start.js
 const start = () => {
-  const port = serverConfig.port || 3001;
+  const port = serverConfig.port || 3000;
   // Instruct our server to start listening for requests.
   server.listen( port, () => {
     console.log(`HTTPS server ready and listening for connections @ https://localhost:${serverConfig.port}`);

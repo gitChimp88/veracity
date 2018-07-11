@@ -38,13 +38,16 @@
     "babel-eslint": "^8.2.5",
     "chalk": "^2.1.0",
     "cheerio": "^1.0.0-rc.2",
+    "connect-flash": "^0.1.1",
     "eslint": "^5.0.1",
     "express-session": "^1.15.6",
+    "express-winston": "^2.5.1",
     "fs-extra": "^6.0.1",
     "passport": "^0.4.0",
     "passport-azure-ad": "^3.0.12",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
+    "winston": "^3.0.0",
     "yeoman-generator": "^2.0.3",
     "yosay": "^2.0.1"
   },
@@ -59,9 +62,9 @@
   "bugs": {
     "url": "https://github.com/veracity/generator-veracity/issues"
   },
-  "scripts": { 
-      "client": "cd ../react-cosmosdb && HTTPS=true yarn start",
-      "server": "nodemon start",
-      "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+  "scripts": {
+    "client": "cd ../react-cosmosdb && PORT=3000 HTTPS=true yarn start",
+    "server": "nodemon start",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   }
 }

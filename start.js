@@ -145,13 +145,11 @@ app.get('/myauth/checkifloggedin', (req, res) => {
   res.send(
     { user: req.user });
 });
-
 app.get('/', (req, res) => {
   // Render the index view (passing it an object with user data)
   // res.render('index', { user: req.user });
   console.log('req.user = ', req.user);
-  res.send(
-    { user: req.user });
+  res.send( { user: req.user });
 });
 // This route is where we retrieve the authentication information posted
 // To perform the necessary steps it needs to parse post data as well as
@@ -159,24 +157,23 @@ app.get('/', (req, res) => {
 // bodyParser.urlencoded is  // to support URL-encoded bodies
 app.post('/', bodyParser.urlencoded({ extended: true })); 
 
-// After registering the body-parser middleware for this specific route
+// After registering the body-parser kmiddleware for this specific route
 // (namely 'POST /'). We can apply our authenticator to read the POSTed
 // information. We receive this information and store it on our server for
 // use later. Doing so saves us from having to call back to Azure B2C on
 // every request in order to verify the user again. TODO: saved
 app.post('/', (req, res, next) => {
     // Overview step 3
-    console.log('req.user = ', req);
+    console.log('\n\n\n\n\nWe accept key information from Azure AD here. \n req.user = ', req.user);
     helpers.authenticator(res)(req, res, next);
   },
   (req, res) => {
     // Finally we redirect back to the front page, but this time the req.user
     // parameter will be populated because we are signed in.
-    res.redirect('https://localhost:3000');
+    // res.redirect('https://localhost:3001/');
+    res.redirect('https://instatrustdev.azurewebsites.net/callback');
   }
 );
-
-
 // At this point we can use the information Azure B2C returned to us to
 // perform requests to the Veracity API provided we requested the information
 // to begin with. Every time the user performs an action that requires a call
@@ -198,7 +195,7 @@ app.get('/login', helpers.ensureSignInPolicyQueryParameter,
     /* Overview step 2.  Add our authenticator middleware helper (passport) 
     to handle the authentication. */
     helpers.authenticator(res)(req, res, next); 
-    console.log('response back from Veracity/AD B2C = ', res);
+    // console.log('response back from Veracity/AD B2C = ', res);
     console.log('after helpers.authenticator(), res.user = ', res.user);
   },
   (req, res) => {
@@ -332,12 +329,11 @@ app.get('/api/services', helpers.ensureAuthenticated, (req, res) => {
 app.use('/api1', helpers.ensureAuthenticated, api);
 
 app.get('*', (req, res, next) => {
-  res.sendFile('/public/index.html');
+  // res.sendFile('/public/index.html');
   const err = new Error(`Four OHH four! req.originalUrl = ${req.originalUrl}\n`);
   err.status = 404;
   next(err);
 });
-
 // express-winston errorLogger makes sense AFTER the router.
 /* app.use(expressWinston.errorLogger({
   transports: [

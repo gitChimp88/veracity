@@ -10,7 +10,7 @@ const databaseConfig = {
   // Or you can just put the whole connection string in at once for your db.
   cosmosConnectString:
     'mongodb://azurecosmosdbaccountevan:sA4vaugVTvQbTCCvscsACwRmVTd0ReW6d4b8BaCTb61sOmadCsjDa4UcUaRATeEl2tWOYuXfHZJ7qkWvBXCOaQ==@azurecosmosdbaccountevan.documents.azure.com:10255/?ssl=true&replicaSet=globaldb'
-  // These settings usually do not change between applications.
+    
 };
 
 // Configuration for our server
@@ -21,9 +21,9 @@ intended backend server (in the case
 serverConfig.port) has to be there.  */
 const serverConfig = {
   // The port our application will be served from. This can be any valid port number as long as it is not in use.
-  port: 3001,
+  port: 3000,
 
-  // The path where static assets like client side JavaScript are stored.
+  // EXPERIMENT: fix 'Cannot POST /' error. The path where static assets like client side JavaScript are stored.
   staticPath: './client',
 
   // The paths to the certificate and key files we need to set up an HTTPS server.
@@ -32,22 +32,17 @@ const serverConfig = {
 };
 
 //
-// Authentication  for configuration and Azure/configuration: configuration     
-//
-
-// Normally you only need to alter these options:
-// const clientID = 'YOUR CLIENT ID'; // Your application ID that you get from https://developer.veracity.com when you registered your application.
+// Authentication  for configuration and Azure/configuration:     
+// These settings usually do not change between applications.
+// Example credentials:
 // const clientID = 'b128d927-b7bc-4559-ad99-8290aae7beb8'; // Your application ID that you get from https://developer.veracity.com when you registered your application.
-
 // const clientSecret = 'n]4e|jhs1lP0aJIADt5rdvDa/'; // Your application secret that you received from https://developer.veracity.com when you registered your application.
+// const redirectUrl = 'https://localhost:3000/'; // The redirect-url you registered with your application. Configure in Developer portal
 
-const redirectUrl = 'https://localhost:3000/'; // The redirect-url you registered with your application. Configure in Developer portal
-// const redirectUrl = 'https://192.168.1.51:3000'; // The redirect-url you registered with your application. Configure in Developer portal
-
-
-
-
-
+// Instatrust credentials
+const clientID = 'a6c76626-3c3c-4467-ab45-46df5d2aff37'; 
+const clientSecret = 'R81IMvwg/fs53nU6B4QZ5M7Z';
+const redirectUrl = 'https://instatrustDEV.azurewebsites.net/callback';
 
 //
 const tenantID = 'a68572e3-63ce-4bc1-acdc-b64943502e9d'; // Veracity tenant ID
@@ -61,11 +56,15 @@ const authConfig = {
     clientSecret,
 
     responseType: 'code',
-    responseMode: 'form_post', // How the authentication server will respond back when authentication is complete. 'form_post' is required by Azure B2C.
-    redirectUrl: redirectUrl, // The url where authentication data is returned from B2C/ADFS. This MUST match the configured return url from when the application was registered.
-    allowHttpForRedirectUrl: false, // Prevent using HTTP for redirects. This forces use of HTTPS for all urls and is the safer method.
-    loggingNoPII: false, // loggingNoPII means not logging anything related to personal identification information, turning it to false will give you the full detail of the error)
-
+    /*  How the authentication server will respond back when authentication is complete. 
+    'form_post' is required by Azure B2C. */
+    responseMode: 'form_post',  
+    /* The url where authentication data is returned from B2C/ADFS. The redirect_uri of your 
+    app, where authentication responses can be sent and received by your app.This MUST match 
+    the configured return url from when the application was registered. */
+    redirectUrl: redirectUrl,  
+    allowHttpForRedirectUrl: false, // Prevent using HTTP for redir related to personal identification information, turning it to false will give you the full detail of the error)
+    loggingNoPII: false, // loggingNoPII means not logging anything related to personal identification information, turning it to false will give you the full detail of the error
     // Which scopes we want to retrieve.
     scope: [
       'openid', // Perform OpenIDConnect flow and returns the id_token.
