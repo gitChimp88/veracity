@@ -42,7 +42,8 @@ const serverConfig = {
 // Instatrust credentials
 const clientID = 'a6c76626-3c3c-4467-ab45-46df5d2aff37'; 
 const clientSecret = 'R81IMvwg/fs53nU6B4QZ5M7Z';
-const redirectUrl = 'https://instatrustDEV.azurewebsites.net/callback';
+// const redirectUrl = 'https://instatrustDEV.azurewebsites.net/callback';
+const redirectUrl = 'https://localhost:3000/';
 
 //
 const tenantID = 'a68572e3-63ce-4bc1-acdc-b64943502e9d'; // Veracity tenant ID

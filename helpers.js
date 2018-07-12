@@ -19,7 +19,7 @@ exports.authenticator = res => {
 // Helper middleware that will verify that the user is authenticated and if not
 // perform authentication. Its the same as: req.session.passport.user !== undefined
 exports.ensureAuthenticated = (req, res, next) => {
-  // console.log( 'ensureAuthenticated ran!! req = ', req, 'res = ', res)
+  console.log( 'ensureAuthenticated ran!!' )
   console.log('req.isAuthenticated() = ', req.isAuthenticated());
   if (req.isAuthenticated()) {
     // User is authenticated, simply pass control to the next route handler.

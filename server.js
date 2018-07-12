@@ -23,12 +23,11 @@ if (!fs.existsSync(keyFullPath)) throw new Error(`Unable to resolve private key 
 if (!fs.existsSync(certFullPath)) throw new Error(`Unable to resolve certificate file. Use 'npm run gencert' to generate this file (requires openssl). Expected location "${certFullPath}"`);
 
 const app = express(); // Initialize an expressjs application instance.
-/* var expressWinston = require('express-winston');
-var winston = require('winston'); // for transports.Console */
+
 // TODO: add productiion scale session store (Azure Tables, mongo?)
 // EXPERIMENT: experiment to fix 'Cannot POST /' error
-// app.use(express.static(path.join(__dirname, 'public')));
-// app.use(express.static(path.join(__dirname, 'static')));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'static')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

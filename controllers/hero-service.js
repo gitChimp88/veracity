@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Hero = require('../models/hero-model');
+const Hero = require('../db/models/hero-model');
 const ReadPreference = require('mongodb').ReadPreference;
 
 

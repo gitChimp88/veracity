@@ -30,8 +30,10 @@ const api = require('./routes/api');
 
 const helpers = require('./helpers.js');
 
+const expressWinston = require('express-winston');
+const winston = require('winston'); // for transports.Console
 // Connect db
-require('./mongo').connect();
+require('./db/index').connect();
 
 
 // TODO: put authorization code below in its own middleware
@@ -90,13 +92,29 @@ passport.use('azuread-openidconnect', authenticationStrategy);
 Here we store the entire user object we define in the 'verifier' function.
 You can pick only parts of it if you don't need all the information or if you 
 have user information stored somewhere else. */
+const User = require('./db/models/user')
+
 passport.serializeUser((user, done) => {
-  done(null, user);
+  console.log('=== serialize ... called ===')
+	console.log(user) // the whole raw user object!
+	console.log('---------')
+	done(null, { _id: user._id })
 });
 passport.deserializeUser((passportSession, done) => {
   // placeholder for custom user deserialization.
   // maybe you are getoing to get the user from mongo by id?
   // null is for errors
+  console.log('DEserialize ... called')
+	User.findOne(
+		{ _id: id },
+		'firstName lastName photos local.username',
+		(err, user) => {
+			console.log('======= DESERILAIZE USER CALLED ======')
+			console.log(user)
+			console.log('--------------')
+			done(null, user)
+		}
+	)
   done(null, passportSession);
 });
 
@@ -117,20 +135,20 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*'); 
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'); next(); 
 });
+
  // express-winston logger makes sense BEFORE the router
-/* app.use(expressWinston.logger({
+app.use(expressWinston.logger({
 transports: [
   new winston.transports.Console({
     json: true,
     colorize: true
   })
 ]
-})); */
+}));
 
 
 
 app.get('/robots.txt', function (req, res) {
-
   res.type('text/plain');
   res.send('User-agent: *\nDisallow: /');
 });
@@ -151,6 +169,7 @@ app.get('/', (req, res) => {
   console.log('req.user = ', req.user);
   res.send( { user: req.user });
 });
+
 // This route is where we retrieve the authentication information posted
 // To perform the necessary steps it needs to parse post data as well as
 // sign in correctly. This is done using the body-parser middleware.
@@ -164,14 +183,14 @@ app.post('/', bodyParser.urlencoded({ extended: true }));
 // every request in order to verify the user again. TODO: saved
 app.post('/', (req, res, next) => {
     // Overview step 3
-    console.log('\n\n\n\n\nWe accept key information from Azure AD here. \n req.user = ', req.user);
+    console.log(`\n\n\n\n\n Entered the '/' post route; used to accept key information from Azure AD and pass to passport for authentication. \n req.user = `, req.user);
     helpers.authenticator(res)(req, res, next);
   },
   (req, res) => {
     // Finally we redirect back to the front page, but this time the req.user
     // parameter will be populated because we are signed in.
     // res.redirect('https://localhost:3001/');
-    res.redirect('https://instatrustdev.azurewebsites.net/callback');
+    res.redirect('https://localhost:3001');
   }
 );
 // At this point we can use the information Azure B2C returned to us to
@@ -334,15 +353,16 @@ app.get('*', (req, res, next) => {
   err.status = 404;
   next(err);
 });
+
 // express-winston errorLogger makes sense AFTER the router.
-/* app.use(expressWinston.errorLogger({
+app.use(expressWinston.errorLogger({
   transports: [
     new winston.transports.Console({
       json: true,
       colorize: true
     })
   ]
-})); */
+}));
 
 
 // -----------------------------------------------------------------------------

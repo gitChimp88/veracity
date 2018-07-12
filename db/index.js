@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { databaseConfig } = require('./config.js');
+const { databaseConfig } = require('../config');
 
 const cosmosConnectStringHardCoded =
   'mongodb://azurecosmosdbaccountevan:sA4vaugVTvQbTCCvscsACwRmVTd0ReW6d4b8BaCTb61sOmadCsjDa4UcUaRATeEl2tWOYuXfHZJ7qkWvBXCOaQ==@azurecosmosdbaccountevan.documents.azure.com:10255/?ssl=true&replicaSet=globaldb';
