@@ -13,6 +13,8 @@ const { authConfig } = require('./config.js');
 /*  ExpressSession is used to store session info in memory so the user does not 
 have to re-authenticate on every request. */
 const expressSession = require('express-session');
+const dbConnection = require('./db');
+const MongoStore = require('connect-mongo')(expressSession);
 
 /*  Get the strategy we use to authenticate with Azure B2C and ADFS (it handles 
   both for us) */
@@ -33,7 +35,8 @@ const helpers = require('./helpers.js');
 const expressWinston = require('express-winston');
 const winston = require('winston'); // for transports.Console
 // Connect db
-require('./db/index').connect();
+
+// Loading evnironmental variables here
 
 
 // TODO: put authorization code below in its own middleware
@@ -46,7 +49,7 @@ https://github.com/expressjs/session */
 // -----------------------------------------------------------------------------
 app.use(
   expressSession({
-    secret: 'session secret', // The key phrase used to sign session cookies.
+    secret: process.env.APP_SECRET || 'session secret', // The key phrase used to sign session cookies.
     resave: false, // Prevent resaving session data if nothing was modified.
     /* Only save sessions if they are actually initialized (i.e.: only save if 
       the user is actually authenticated) */
@@ -56,6 +59,7 @@ app.use(
       sent over a secure (HTTPS) connection */
       secure: true  
     }
+    // store: new MongoStore({ mongooseConnection: dbConnection })
   })
 );
 
@@ -92,29 +96,31 @@ passport.use('azuread-openidconnect', authenticationStrategy);
 Here we store the entire user object we define in the 'verifier' function.
 You can pick only parts of it if you don't need all the information or if you 
 have user information stored somewhere else. */
-const User = require('./db/models/user')
+const User = require('./db/models/user');
 
 passport.serializeUser((user, done) => {
-  console.log('=== serialize ... called ===')
-	console.log(user) // the whole raw user object!
-	console.log('---------')
-	done(null, { _id: user._id })
+  console.log('=== serialize ... called ===');
+	console.log(user); // the whole raw user object!
+	console.log('---------');
+  done(null, user);
+	// done(null, { _id: user._id });
 });
-passport.deserializeUser((passportSession, done) => {
+passport.deserializeUser((passportSession, done) => { 
   // placeholder for custom user deserialization.
   // maybe you are getoing to get the user from mongo by id?
   // null is for errors
-  console.log('DEserialize ... called')
-	User.findOne(
+  console.log('DEserialize ... called');
+// EXPERIMENT	
+/*    User.findOne(
 		{ _id: id },
-		'firstName lastName photos local.username',
+		'name id displayName access_token',
 		(err, user) => {
-			console.log('======= DESERILAIZE USER CALLED ======')
-			console.log(user)
-			console.log('--------------')
-			done(null, user)
-		}
-	)
+			console.log('======= DESERILAIZE USER CALLED ======');
+			console.log(user);
+			console.log('--------------');
+			done(null, user);
+		} 
+  );  */
   done(null, passportSession);
 });
 
@@ -122,7 +128,7 @@ passport.deserializeUser((passportSession, done) => {
 app.use(passport.initialize()); // Register passport with our expressjs instance
 /* We are using sessions to persist the login and must therefore also register 
 the session middleware from passport. */
-app.use(passport.session());  
+app.use(passport.session()); // calls the deserializeUser 
 
 // Routes are here!
 // -----------------------------------------------------------------------------
@@ -146,13 +152,10 @@ transports: [
 ]
 }));
 
-
-
 app.get('/robots.txt', function (req, res) {
   res.type('text/plain');
   res.send('User-agent: *\nDisallow: /');
 });
-
 
 /* Our home route. Returns index.html and sets the user state if 
 the user is logged in (req.user will be undefined of not authenticated). */

@@ -2,6 +2,11 @@
 // This file sets up our server and expressjs instance.
 // It does not contain code specific to the authentication and api calls. See start.js
 // -----------------------------------------------------------------------------
+if (process.env.NODE_ENV !== 'production') {
+	console.log('loading dev environments');
+	require('dotenv').config();
+}
+require('dotenv').config();
 
 const fs = require('fs'); // Used to read the index.html file from disk.
 const path = require('path'); // Used to resolve paths properly.
@@ -48,9 +53,11 @@ app.set('view engine', 'ejs');
 app.use(morgan('dev'));
 
 
-// Create this handy function that we can call to start up our server once we have configured the stuff we need in start.js
+/*  Create this handy function that we can call to start up our server once 
+    we have configured the stuff we need in start.js
+*/
 const start = () => {
-  const port = serverConfig.port || 3000;
+  const port = process.env.PORT || 3000;
   // Instruct our server to start listening for requests.
   server.listen( port, () => {
     console.log(`HTTPS server ready and listening for connections @ https://localhost:${serverConfig.port}`);

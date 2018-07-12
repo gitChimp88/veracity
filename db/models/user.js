@@ -5,28 +5,10 @@ mongoose.promise = Promise;
 
 // Define userSchema
 const userSchema = new Schema({
-	firstName: { type: String, unique: false },
-	lastName: { type: String, unique: false },
-	local: {
-		username: { type: String, unique: false, required: false },
-		password: { type: String, unique: false, required: false }
-	},
-	veracity: {
-		veracityId: { type: String, required: false }
-	},
-  assetsOwned: [],
-  favoriteAssets: []
-  // POSSIBLE 
-  // local: {
-	// 	email: { type: String, unique: true },
-	// 	password: { type: String }
-	// },
-	// google: {
-	// 	id: { type: String },
-	// 	photos: []
-	// },
-	// firstName: { type: String },
-	// lastName: { type: String }
+		name: { type: String, unique: false, required: false },
+		id: { type: String, unique: false, required: false },
+		displayName: { type: String, unique: false, required: false },
+		access_token: { type: String, unique: false, required: false }
 });
 
 // POSSIBLE:1 Define schema methods

@@ -14,11 +14,6 @@ const databaseConfig = {
 };
 
 // Configuration for our server
-/* The "proxy": "http://localhost:3001" in the 
-package.json of the front end app, tells webpack development server 
-where to look for its backend. So your 
-intended backend server (in the case 
-serverConfig.port) has to be there.  */
 const serverConfig = {
   // The port our application will be served from. This can be any valid port number as long as it is not in use.
   port: 3000,
