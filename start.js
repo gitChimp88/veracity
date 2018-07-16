@@ -36,11 +36,11 @@ const helpers = require('./helpers.js');
 const expressWinston = require('express-winston');
 const winston = require('winston'); // for transports.Console
 const corsMiddleware = cors({
-  origin: [process.env.URL, 'http://localhost:4200']
+  origin: [process.env.URL, 'https://192.168.1.51:3001/']
 })
 
-app.use(corsMiddleware)
-app.options('*', corsMiddleware)
+app.use(corsMiddleware);
+app.options('*', corsMiddleware);
 
 // TODO: put authorization code below in its own middleware
 // -----------------------------------------------------------------------------
