@@ -138,7 +138,7 @@ app.use(passport.session()); // calls the deserializeUser
 
 // enable CORS
 app.use(function (req, res, next) { 
-  res.header('Access-Control-Allow-Origin', '*'); 
+  res.header('Access-Control-Allow-Origin', 'https://192.168.1.51:3001'); 
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'); next(); 
 });
 
@@ -193,7 +193,7 @@ app.post('/', (req, res, next) => {
     // Finally we redirect back to the front page, but this time the req.user
     // parameter will be populated because we are signed in.
     // res.redirect('https://localhost:3001/');
-    res.redirect('https://localhost:3001');
+    res.redirect('https://192.168.1.51:3001');
   }
 );
 // At this point we can use the information Azure B2C returned to us to
