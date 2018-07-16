@@ -162,7 +162,7 @@ app.get('/robots.txt', function (req, res) {
 
 /* Our home route. Returns index.html and sets the user state if 
 the user is logged in (req.user will be undefined of not authenticated). */
-app.get('/myauth/checkifloggedin', (req, res) => {
+app.get('/myauth/isloggedin', (req, res) => {
   // Render the index view (passing it an object with user data)
   // res.render('index', { user: req.user });
   console.log('req.user = ', req.user);
@@ -176,7 +176,7 @@ app.get('/', (req, res) => {
   res.send( { user: req.user });
 });
 
-// This route is where we retrieve the authentication information posted
+// This route is where we retrieve the authentication information posted  
 // To perform the necessary steps it needs to parse post data as well as
 // sign in correctly. This is done using the body-parser middleware.
 // bodyParser.urlencoded is  // to support URL-encoded bodies
@@ -195,8 +195,9 @@ app.post('/', (req, res, next) => {
   (req, res) => {
     // Finally we redirect back to the front page, but this time the req.user
     // parameter will be populated because we are signed in.
-    // res.redirect('https://localhost:3001/');
-    res.redirect('https://192.168.1.51:3001/');
+    /* in order to get the sessionid from the cookie this must match what you 
+    registered with veracityh */
+    res.redirect('https://localhost:3001/');
   }
 );
 // At this point we can use the information Azure B2C returned to us to
