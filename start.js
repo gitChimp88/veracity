@@ -16,6 +16,7 @@ const expressSession = require('express-session');
 const dbConnection = require('./db');
 const MongoStore = require('connect-mongo')(expressSession);
 
+const cors = require('cors');
 /*  Get the strategy we use to authenticate with Azure B2C and ADFS (it handles 
   both for us) */
 const OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
@@ -34,10 +35,12 @@ const helpers = require('./helpers.js');
 
 const expressWinston = require('express-winston');
 const winston = require('winston'); // for transports.Console
-// Connect db
+const corsMiddleware = cors({
+  origin: [process.env.URL, 'http://localhost:4200']
+})
 
-// Loading evnironmental variables here
-
+app.use(corsMiddleware)
+app.options('*', corsMiddleware)
 
 // TODO: put authorization code below in its own middleware
 // -----------------------------------------------------------------------------
@@ -193,7 +196,7 @@ app.post('/', (req, res, next) => {
     // Finally we redirect back to the front page, but this time the req.user
     // parameter will be populated because we are signed in.
     // res.redirect('https://localhost:3001/');
-    res.redirect('https://192.168.1.51:3001');
+    res.redirect('https://192.168.1.51:3001/');
   }
 );
 // At this point we can use the information Azure B2C returned to us to
