@@ -19,53 +19,62 @@ const MongoStore = require('connect-mongo')(expressSession);
 const cors = require('cors');
 /*  Get the strategy we use to authenticate with Azure B2C and ADFS (it handles 
   both for us) */
-const OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
-
-// BodyParser is specifically used to parse the POST response from Azure B2C/ADFS.
-const bodyParser = require('body-parser');
-/* Helper library for performing http requests from node.js. Used to query the 
-Veracity API from the server on behalf of the user. */
-const request = require('request-promise-native');
-// PassportJs handles authentication for us using the passport-azure-ad plug-in.
-const passport = require('passport');
-
-const api = require('./routes/api');
-
-const helpers = require('./helpers.js');
-
-const expressWinston = require('express-winston');
-const winston = require('winston'); // for transports.Console
-const corsMiddleware = cors({
-  origin: [process.env.URL, 'https://192.168.1.51:3001/']
-})
-
-app.use(corsMiddleware);
-app.options('*', corsMiddleware);
-
-// TODO: put authorization code below in its own middleware
-// -----------------------------------------------------------------------------
-/* Set up our session manager that will use in-memory storage for sessions. 
-You should not use in-memory storage in production. This must be done before 
-we attach the passport middleware or passport will be unable to use sessions
-For a full description of these options see 
-https://github.com/expressjs/session */
-// -----------------------------------------------------------------------------
-app.use(
-  expressSession({
-    secret: process.env.APP_SECRET || 'session secret', // The key phrase used to sign session cookies.
-    resave: false, // Prevent resaving session data if nothing was modified.
-    /* Only save sessions if they are actually initialized (i.e.: only save if 
-      the user is actually authenticated) */
-    saveUninitialized: false, 
-    cookie: {
-      /* Set the https flag on the session cookie ensuring that it can only be 
-      sent over a secure (HTTPS) connection */
-      secure: true  
-    }
-    // store: new MongoStore({ mongooseConnection: dbConnection })
-  })
-);
-
+  const OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
+  
+  // BodyParser is specifically used to parse the POST response from Azure B2C/ADFS.
+  const bodyParser = require('body-parser');
+  /* Helper library for performing http requests from node.js. Used to query the 
+  Veracity API from the server on behalf of the user. */
+  const request = require('request-promise-native');
+  // PassportJs handles authentication for us using the passport-azure-ad plug-in.
+  const passport = require('passport');
+  
+  const api = require('./routes/api');
+  
+  const helpers = require('./helpers.js');
+  
+  const expressWinston = require('express-winston');
+  const winston = require('winston'); // for transports.Console
+  const corsMiddleware = cors({
+    origin: [process.env.URL, 'https://192.168.1.51:3001/', 'https://localhost:3000']
+  });
+  
+  // enable CORS w express
+  app.use(corsMiddleware);
+  app.options('*', corsMiddleware);
+ // enable cores manually 
+  app.use(function (req, res, next) { 
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-Auth_Token, Content-Type, Accept');  
+    res.header('Access-Control-Allow-Credentials: true');
+    next();
+  });
+  
+  // TODO: put authorization code below in its own middleware
+  // -----------------------------------------------------------------------------
+  /* Set up our session manager that will use in-memory storage for sessions. 
+  You should not use in-memory storage in production. This must be done before 
+  we attach the passport middleware or passport will be unable to use sessions
+  For a full description of these options see 
+  https://github.com/expressjs/session */
+  // -----------------------------------------------------------------------------
+  app.use(
+    expressSession({
+      secret: process.env.APP_SECRET || 'session secret', // The key phrase used to sign session cookies.
+      resave: false, // Prevent resaving session data if nothing was modified.
+      /* Only save sessions if they are actually initialized (i.e.: only save if 
+        the user is actually authenticated) */
+        saveUninitialized: false, 
+        cookie: {
+          /* Set the https flag on the session cookie ensuring that it can only be 
+          sent over a secure (HTTPS) connection */
+          secure: true  
+        }
+        // store: new MongoStore({ mongooseConnection: dbConnection })
+      })
+    );
+    
 // -----------------------------------------------------------------------------
 // Now we can set up our authentication details
 // -----------------------------------------------------------------------------
@@ -139,11 +148,6 @@ app.use(passport.session()); // calls the deserializeUser
 // routes our app will respond to.
 // -----------------------------------------------------------------------------
 
-// enable CORS
-app.use(function (req, res, next) { 
-  res.header('Access-Control-Allow-Origin', 'https://192.168.1.51:3001'); 
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'); next(); 
-});
 
  // express-winston logger makes sense BEFORE the router
 app.use(expressWinston.logger({
@@ -162,10 +166,8 @@ app.get('/robots.txt', function (req, res) {
 
 /* Our home route. Returns index.html and sets the user state if 
 the user is logged in (req.user will be undefined of not authenticated). */
-app.get('/myauth/isloggedin', (req, res) => {
-  // Render the index view (passing it an object with user data)
-  // res.render('index', { user: req.user });
-  console.log('req.user = ', req.user);
+app.get('/myauth/isloggedin', helpers.ensureAuthenticated, (req, res) => {
+  console.log('Hit /myauth/isloggedin; req.user = ', req.user);
   res.send(
     { user: req.user });
 });
@@ -176,10 +178,10 @@ app.get('/', (req, res) => {
   res.send( { user: req.user });
 });
 
-// This route is where we retrieve the authentication information posted  
+// This route is where we retrieve the authentication information posted   
 // To perform the necessary steps it needs to parse post data as well as
 // sign in correctly. This is done using the body-parser middleware.
-// bodyParser.urlencoded is  // to support URL-encoded bodies
+// bodyParser.urlencoded is  // to support URL-encoded bodies. 
 app.post('/', bodyParser.urlencoded({ extended: true })); 
 
 // After registering the body-parser kmiddleware for this specific route
@@ -197,7 +199,7 @@ app.post('/', (req, res, next) => {
     // parameter will be populated because we are signed in.
     /* in order to get the sessionid from the cookie this must match what you 
     registered with veracityh */
-    res.redirect('https://localhost:3001/');
+    res.redirect('https://localhost:3001/dashboard');
   }
 );
 // At this point we can use the information Azure B2C returned to us to

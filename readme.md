@@ -80,3 +80,6 @@ v0.1.0:
 - [passportjs](http://www.passportjs.org/)
 - [expressjs/session](https://github.com/expressjs/session)
 - [cheerio](https://github.com/cheeriojs/cheerio)
+
+## Notes:
+- use nodemon@1.12.6
