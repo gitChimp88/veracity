@@ -36,7 +36,7 @@ const cors = require('cors');
   const expressWinston = require('express-winston');
   const winston = require('winston'); // for transports.Console
   const corsMiddleware = cors({
-    origin: [process.env.URL, 'https://192.168.1.51:3001/', 'https://localhost:3000']
+    origin: [process.env.URL, 'https://192.168.1.51:3001/', 'https://localhost:3000', 'https://127.0.0.1']
   });
   
   // enable CORS w express
@@ -45,9 +45,9 @@ const cors = require('cors');
  // enable cores manually 
   app.use(function (req, res, next) { 
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-Auth_Token, Content-Type, Accept');  
-    res.header('Access-Control-Allow-Credentials: true');
+    // res.header('Access-Control-Allow-Credentials', 'true');
     next();
   });
   
@@ -122,6 +122,10 @@ passport.deserializeUser((passportSession, done) => {
   // maybe you are getoing to get the user from mongo by id?
   // null is for errors
   console.log('DEserialize ... called');
+  console.log('======= DESERILAIZE USER CALLED ======');
+			console.log('passportSession = ', passportSession);
+			console.log('--------------');
+			// done(null, user);
 // EXPERIMENT	
 /*    User.findOne(
 		{ _id: id },
@@ -199,7 +203,7 @@ app.post('/', (req, res, next) => {
     // parameter will be populated because we are signed in.
     /* in order to get the sessionid from the cookie this must match what you 
     registered with veracityh */
-    res.redirect('https://localhost:3001/dashboard');
+    res.redirect('https://localhost:3001/');
   }
 );
 // At this point we can use the information Azure B2C returned to us to

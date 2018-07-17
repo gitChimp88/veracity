@@ -35,10 +35,12 @@
   },
   "dependencies": {
     "babel-eslint": "^8.2.5",
+    "btoa": "^1.2.1",
     "chalk": "^2.1.0",
     "cheerio": "^1.0.0-rc.2",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^2.0.1",
+    "cors": "^2.8.4",
     "dotenv": "^6.0.0",
     "eslint": "^5.0.1",
     "express-session": "^1.15.6",
