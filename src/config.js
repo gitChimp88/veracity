@@ -1,0 +1,1 @@
+exports.serverURL = 'https://80.36.144.202:3001';

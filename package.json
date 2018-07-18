@@ -1,0 +1,36 @@
+{
+  "name": "express-react-starter",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "btoa": "^1.2.1",
+    "bulma": "^0.5.0",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "debug": "^3.0.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "express": "^4.15.3",
+    "lodash": "^4.17.10",
+    "material-ui": "^0.20.1",
+    "mongodb": "^2.2.31",
+    "mongoose": "^4.11.5",
+    "morgan": "^1.8.2",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-tap-event-plugin": "^3.0.3",
+    "zl-fetch": "^2.1.2"
+  },
+  "devDependencies": {
+    "react-scripts": "1.0.10"
+  },
+  "scripts": {
+    "start": "HTTPS=true && react-scripts start",
+    "build": "react-scripts build && mv build server",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "https://localhost:3000/"
+}
