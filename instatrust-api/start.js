@@ -36,7 +36,7 @@ const cors = require('cors');
   const expressWinston = require('express-winston');
   const winston = require('winston'); // for transports.Console
   const corsMiddleware = cors({
-    origin: [process.env.URL, 'https://192.168.1.51:3001/', 'https://localhost:3001', 'https://127.0.0.1']
+    origin: [process.env.URL, 'https://localhost:3001/']
   });
   
   // enable CORS w express
