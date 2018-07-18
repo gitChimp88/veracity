@@ -20,4 +20,3 @@ module.exports.countBreeds = async () => {
 // countBreeds()
 // can call from command line like this: 
 // $ node -e 'require("./in-dogs.js").countBreeds()'
-
