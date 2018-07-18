@@ -1,0 +1,13 @@
+{
+  "name": "compliment",
+  "version": "0.0.1",
+  "description": "Tell us how awesome we are.",
+  "preferGlobal": "true",
+  "bin": {
+    "compliment": "compliment.js"
+  },
+  "author": "Rob Dodson",
+  "engines": {
+    "node": "*"
+  }
+}
