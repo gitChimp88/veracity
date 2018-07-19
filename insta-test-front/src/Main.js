@@ -59,10 +59,10 @@ class Main extends Component {
       authenticated: false
     }
   };
-  async componentDidMount() {
+   componentDidMount() {
     console.log('component mounted!')
     // check if user is logged in on refresh
-    await this.toggleAuthenticateStatus()
+     this.toggleAuthenticateStatus()
   }
 
    toggleAuthenticateStatus = async () => {
@@ -70,7 +70,33 @@ class Main extends Component {
     console.log('toggleAuthenticateStatus()!');
      await this.setState({ authenticated: await Auth.authed() })
   }
-
+  componentDidMount() {
+    this.checkIfAuthenticated()
+    .then(res => this.setState({ authenticated: res }))
+    .catch(err => console.log(err));
+  }
+  checkIfAuthenticated = async () => {
+    // await response of fetch call
+    let response = await fetch('https://localhost:3000/myauth/isloggedin', 
+      {
+        headers: { "Content-Type": "application/json; charset=utf-8"}
+      }
+    );
+    // only proceed once promise is resolved
+     let data = response.json();
+    if (response.status !== 200) throw Error(body.message);
+    // only proceed once second promise is resolved
+    console.log('\n\n\nresponse header.get(\'Content-Type\') = ', response.headers.get('Content-Type'));
+    console.log('response.headers.get(\'Date\') = ', response.headers.get('Date'));
+    console.log('response.status = ', response.status);
+    console.log('response.statusText = ', response.statusText);
+    console.log('response.type = ', response.type);
+    console.log('response.url = ', response.url);
+    console.log('data gotten from authed = ', data)
+    const isUserLoggedIn = !isEmpty(data);
+    console.log(' returned from authed(), isUserLoggedIn = ', isUserLoggedIn);
+    return isUserLoggedIn;
+  }
 /*  EXPERIMENT:
   // check if user is logged in on refresh
   componentDidMount() {

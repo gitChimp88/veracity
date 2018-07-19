@@ -154,6 +154,12 @@ app.use(passport.initialize()); // Register passport with our expressjs instance
 the session middleware from passport. */
 app.use(passport.session()); // calls the deserializeUser 
 
+
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 // Routes are here!
 // -----------------------------------------------------------------------------
 // Now that all our helper and initialization stuff is ready we can set up the
@@ -187,6 +193,7 @@ app.get('/', (req, res) => {
   // Render the index view (passing it an object with user data)
   // res.render('index', { user: req.user });
   console.log('req.user = ', req.user);
+  console.log('purple!!!');
   res.send( { user: req.user });
 });
 
@@ -211,7 +218,8 @@ app.post('/', (req, res, next) => {
     // parameter will be populated because we are signed in.
     /* in order to get the sessionid from the cookie this must match what you 
     registered with veracityh */
-    res.redirect('https://localhost:3001/');
+    // res.redirect('https://localhost:3000/');
+    res.redirect('/');
   }
 );
 // At this point we can use the information Azure B2C returned to us to

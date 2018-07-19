@@ -31,8 +31,10 @@ const app = express(); // Initialize an expressjs application instance.
 
 // TODO: add productiion scale session store (Azure Tables, mongo?)
 // EXPERIMENT: experiment to fix 'Cannot POST /' error
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'static')));
+// app.use(express.static(path.join(__dirname, '../insta-test-front/public')));
+// app.use(express.static(path.join(__dirname, 'static')));
+app.use(express.static(path.join(__dirname, 'build')));
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
