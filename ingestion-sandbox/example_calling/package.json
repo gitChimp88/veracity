@@ -1,0 +1,16 @@
+{
+  "name": "calling",
+  "version": "0.0.1",
+  "description": "Make calls to gpm+ apis and save to db",
+  "preferGlobal": "true",
+  "bin": {
+    "calling": "calling.js"
+  },
+  "author": "Rob Dodson",
+  "engines": {
+    "node": "*"
+  },
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}
