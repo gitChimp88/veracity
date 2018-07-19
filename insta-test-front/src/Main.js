@@ -70,7 +70,7 @@ class Main extends Component {
     console.log('toggleAuthenticateStatus()!');
      await this.setState({ authenticated: await Auth.authed() })
   }
-  componentDidMount() {
+/*   componentDidMount() {
     this.checkIfAuthenticated()
     .then(res => this.setState({ authenticated: res }))
     .catch(err => console.log(err));
@@ -84,7 +84,7 @@ class Main extends Component {
     );
     // only proceed once promise is resolved
      let data = response.json();
-    if (response.status !== 200) throw Error(body.message);
+    if (response.status !== 200) throw Error(response.message);
     // only proceed once second promise is resolved
     console.log('\n\n\nresponse header.get(\'Content-Type\') = ', response.headers.get('Content-Type'));
     console.log('response.headers.get(\'Date\') = ', response.headers.get('Date'));
@@ -96,7 +96,10 @@ class Main extends Component {
     const isUserLoggedIn = !isEmpty(data);
     console.log(' returned from authed(), isUserLoggedIn = ', isUserLoggedIn);
     return isUserLoggedIn;
-  }
+  } */
+
+
+  
 /*  EXPERIMENT:
   // check if user is logged in on refresh
   componentDidMount() {

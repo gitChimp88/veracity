@@ -97,6 +97,7 @@ const verifier = function (iss, sub, profile, jwtClaims, access_token,
     // Make sure we store the access token
     access_token: params.access_token
   };
+  console.log('verifier funciton called!! user = ', user);
 
 /* Tell passport that no error occured (null) and which user object to store 
   with the session. If the credentials are not valid (for example, if the 

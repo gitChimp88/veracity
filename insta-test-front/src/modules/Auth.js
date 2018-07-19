@@ -3,18 +3,6 @@ import { isEmpty } from 'lodash';
 // import zlFetch from "zl-fetch";
 
 
-/* 
-zlFetch("http://some-website.com")
-  .then(response => {
-    const headers = response.headers;
-    const body = response.body;
-  })
-  .catch(error => {
-    const headers = response.headers;
-    const body = response.body;
-    const status = response.status;
-  }); */
-
 
 class Auth {
   static async authed () {
