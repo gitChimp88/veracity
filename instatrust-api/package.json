@@ -49,6 +49,7 @@
     "nodemon": "1.12.6",
     "passport": "^0.4.0",
     "passport-azure-ad": "^3.0.12",
+    "react-scripts": "^1.1.4",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
     "winston": "^2.0.0",
@@ -67,7 +68,7 @@
     "url": "https://github.com/veracity/generator-veracity/issues"
   },
   "scripts": {
-    "client": "cd ../react-cosmosdb && PORT=3001 HTTPS=true yarn start",
+    "client": "cd ../insta-test-front && PORT=3001 HTTPS=true yarn start",
     "server": "nodemon start",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   }

@@ -40,16 +40,23 @@ const cors = require('cors');
   });
   
   // enable CORS w express
-  app.use(corsMiddleware);
+  // app.use(corsMiddleware);
+  app.options('*', cors()); // include before other routes
+  app.use(cors());
   app.options('*', corsMiddleware);
 //  enable cores manually 
   app.use(function (req, res, next) { 
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Expose-Headers', 'Access-Control-*');
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-Auth_Token, Content-Type, Accept');  
-    // res.header('Access-Control-Allow-Credentials', 'true');
-    next();
+    if ('OPTIONS' == req.method) {
+      res.send(200);
+    } else {
+        next();
+    }
   });
   
   // TODO: put authorization code below in its own middleware
