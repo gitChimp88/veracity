@@ -194,7 +194,6 @@ app.get('/', (req, res) => {
   // Render the index view (passing it an object with user data)
   // res.render('index', { user: req.user });
   console.log('req.user = ', req.user);
-  console.log('purple!!!');
   res.send( { user: req.user });
 });
 

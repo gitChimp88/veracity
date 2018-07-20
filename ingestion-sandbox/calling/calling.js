@@ -13,8 +13,9 @@ const authURL = 'http://192.168.32.124:6600/api/Account/Token?api_key=horizon';
 const facilitiesURL = 'http://192.168.32.124:6600/api/horizon/facilities'
 // TODO: put these in env variables
 const creds = { 'username': process.env.GPM_USERNAME, 'password': process.env.GPM_PASSWORD }
-let USER_TOKEN;
+let userToke;
 let authStr;
+const facilityIdArray = []; 
 
 const getToken = async () => {
   try {
@@ -29,9 +30,9 @@ const getFacilityIds = async () => {
   const response = await getToken();
   // console.log('\n\n\nresponse = ', response)
   // console.log('response.data.AccessToken ' + response.data.AccessToken);
-    USER_TOKEN = response.data.AccessToken;
-  // console.log('USER_TOKEN = ', USER_TOKEN);
-    authStr = 'Bearer '.concat(USER_TOKEN);
+    userToke = response.data.AccessToken;
+  // console.log('userToke = ', userToke);
+    authStr = 'Bearer '.concat(userToke);
     // console.log('authStr = ', authStr)
   try {
     return await axios.get( facilitiesURL, { headers: { Authorization: authStr } });
@@ -41,7 +42,6 @@ const getFacilityIds = async () => {
 }
 
 const countFacilities = async () => {
-  const facilityIdArray = []; 
   const response = await getFacilityIds();
   console.log('\n\n FROM countFacilities!');
   // console.log('\n\n response.data = ', JSON.stringify(response.data, null, 2));
