@@ -18,6 +18,7 @@ let authStr;
 
 const getToken = async () => {
   try {
+    // console.log('creds = ', creds)
     return await axios.post( authURL, creds);
   } catch (error) {
     console.error(error)
@@ -40,11 +41,16 @@ const getFacilities = async () => {
 }
 
 const countFacilities = async () => {
+  const facilitiesArray = [];
   const response = await getFacilities();
-  console.log('response.data = ', JSON.stringify(response.data, null, 2));
+  console.log('\n\n FROM countFacilities!');
+  // console.log('\n\n response.data = ', JSON.stringify(response.data, null, 2));
   console.log('response.data = ', response.data );
-  if (response.data.message) {
-    console.log(`Got ${Object.entries(response.data.message).length} facilities`)
+  if (response.data) {
+    console.log(`Got ${Object.entries(response.data).length} facilities`)
+  }
+  response.data.forEach( facility => {
+    return facilitiesArray.push(facility))
   }
 }
 
