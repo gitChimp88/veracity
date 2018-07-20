@@ -25,14 +25,14 @@ const getToken = async () => {
   }
 }
 
-const getFacilities = async () => {
+const getFacilityIds = async () => {
   const response = await getToken();
-  console.log('\n\n\nresponse = ', response)
-  console.log('response.data.AccessToken ' + response.data.AccessToken);
+  // console.log('\n\n\nresponse = ', response)
+  // console.log('response.data.AccessToken ' + response.data.AccessToken);
     USER_TOKEN = response.data.AccessToken;
-  console.log('USER_TOKEN = ', USER_TOKEN);
+  // console.log('USER_TOKEN = ', USER_TOKEN);
     authStr = 'Bearer '.concat(USER_TOKEN);
-    console.log('authStr = ', authStr)
+    // console.log('authStr = ', authStr)
   try {
     return await axios.get( facilitiesURL, { headers: { Authorization: authStr } });
   } catch (error) {
@@ -41,20 +41,26 @@ const getFacilities = async () => {
 }
 
 const countFacilities = async () => {
-  const facilitiesArray = [];
-  const response = await getFacilities();
+  const facilityIdArray = []; 
+  const response = await getFacilityIds();
   console.log('\n\n FROM countFacilities!');
   // console.log('\n\n response.data = ', JSON.stringify(response.data, null, 2));
-  console.log('response.data = ', response.data );
+  // console.log('response.data = ', response.data );
   if (response.data) {
     console.log(`Got ${Object.entries(response.data).length} facilities`)
   }
   response.data.forEach( facility => {
-    return facilitiesArray.push(facility))
-  }
+    return (facility.Parameters[0]) ? 
+    facilityIdArray.push(facility.Parameters[0].Key.FacilityId) : null;
+/*     if (facility.Parameters[0] ) {
+      return facilityIdArray.push(facility.Parameters[0]);
+    } */
+  });
+  console.log('facilityIdArray = ', facilityIdArray);
+  console.log(facilityIdArray.length, "facilities with a facility id")
 }
 
-// getFacilities();
+// getFacilityIds();
 countFacilities()
 
 /* 

@@ -1,0 +1,1439 @@
+[
+  {
+    "Id": 1,
+    "Descriptions": [
+      {
+        "Name": "PlantName",
+        "Value": "ADemo 01 (Italy)",
+        "ValueType": "Text",
+        "DescriptionType": "Name",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantName"
+          }
+        }
+      },
+      {
+        "Name": "PlantLatitud_Longitud",
+        "Value": "41.9349765005466|12.48046875",
+        "ValueType": "GeoLocalization",
+        "DescriptionType": "GeoLocalization",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantLatitud_Longitud"
+          }
+        }
+      },
+      {
+        "Name": "PlantRated_Power",
+        "Value": "12000",
+        "ValueType": "Decimal",
+        "DescriptionType": "PeakPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantRated_Power"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "0",
+        "ValueType": "Decimal",
+        "DescriptionType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "0.7",
+        "ValueType": "Decimal",
+        "DescriptionType": "PanelDegradationCorrectionCoefficient",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "-0.41",
+        "ValueType": "Decimal",
+        "DescriptionType": "TemperatureCorrectionCoefficient",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "Potencia Nominal",
+        "Value": "12000",
+        "ValueType": "Decimal",
+        "DescriptionType": "NominalPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Potencia Nominal"
+          }
+        }
+      },
+      {
+        "Name": "Technology",
+        "Value": "Wind",
+        "ValueType": "Text",
+        "DescriptionType": "Technology",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Technology"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "6/1/2015 12:00:00 AM",
+        "ValueType": "DateTime",
+        "DescriptionType": "StartingDate",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "Region/State",
+        "Value": "State",
+        "ValueType": "Text",
+        "DescriptionType": "Region",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Region/State"
+          }
+        }
+      },
+      {
+        "Name": "City",
+        "Value": "City",
+        "ValueType": "Text",
+        "DescriptionType": "City",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "City"
+          }
+        }
+      },
+      {
+        "Name": "Address",
+        "Value": "Address",
+        "ValueType": "Text",
+        "DescriptionType": "Street",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Address"
+          }
+        }
+      },
+      {
+        "Name": "Description",
+        "Value": "Description",
+        "ValueType": "Text",
+        "DescriptionType": "Description",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Description"
+          }
+        }
+      },
+      {
+        "Name": "MaxWindSpeed",
+        "Value": "25",
+        "ValueType": "Decimal",
+        "DescriptionType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "MaxWindSpeed"
+          }
+        }
+      },
+      {
+        "Name": "Time Zone",
+        "Value": "Europe/Paris",
+        "ValueType": "Text",
+        "DescriptionType": "TimeZone",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Time Zone"
+          }
+        }
+      }
+    ],
+    "Parameters": [
+      {
+        "Key": {
+          "FacilityId": 1,
+          "ParameterId": 1
+        },
+        "Name": "Energy",
+        "Units": "kWh",
+        "ParameterType": "TodayEnergy",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Energy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 1,
+          "ParameterId": 8
+        },
+        "Name": "Irradiance",
+        "Units": "W/m2",
+        "ParameterType": "Irradiance",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Irradiance"
+          }
+        }
+      }
+    ],
+    "FixedParameters": null,
+    "ComputedParameters": null,
+    "FacilityImageFileName": null
+  },
+  {
+    "Id": 37,
+    "Descriptions": [
+      {
+        "Name": "PlantName",
+        "Value": "Demo 00 (Armistead) Wind",
+        "ValueType": "Text",
+        "DescriptionType": "Name",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantName"
+          }
+        }
+      },
+      {
+        "Name": "PlantRated_Power",
+        "Value": "12300",
+        "ValueType": "Decimal",
+        "DescriptionType": "PeakPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantRated_Power"
+          }
+        }
+      },
+      {
+        "Name": "PlantLatitud_Longitud",
+        "Value": "54.6133367347946|-2.62453079223633",
+        "ValueType": "GeoLocalization",
+        "DescriptionType": "GeoLocalization",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantLatitud_Longitud"
+          }
+        }
+      },
+      {
+        "Name": "Potencia Nominal",
+        "Value": "2050",
+        "ValueType": "Decimal",
+        "DescriptionType": "NominalPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Potencia Nominal"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "0.7",
+        "ValueType": "Decimal",
+        "DescriptionType": "PanelDegradationCorrectionCoefficient",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "-0.41",
+        "ValueType": "Decimal",
+        "DescriptionType": "TemperatureCorrectionCoefficient",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "Technology",
+        "Value": "Wind",
+        "ValueType": "Text",
+        "DescriptionType": "Technology",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Technology"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "2/1/2016 12:00:00 AM",
+        "ValueType": "DateTime",
+        "DescriptionType": "StartingDate",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "País",
+        "Value": "",
+        "ValueType": "Text",
+        "DescriptionType": "Country",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "País"
+          }
+        }
+      },
+      {
+        "Name": "Region/State",
+        "Value": "Armistead",
+        "ValueType": "Text",
+        "DescriptionType": "Region",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Region/State"
+          }
+        }
+      },
+      {
+        "Name": "City",
+        "Value": "City 1",
+        "ValueType": "Text",
+        "DescriptionType": "City",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "City"
+          }
+        }
+      },
+      {
+        "Name": "Address",
+        "Value": "Address 1",
+        "ValueType": "Text",
+        "DescriptionType": "Street",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Address"
+          }
+        }
+      },
+      {
+        "Name": "Description",
+        "Value": "Windfarm Armistead",
+        "ValueType": "Text",
+        "DescriptionType": "Description",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Description"
+          }
+        }
+      },
+      {
+        "Name": "MaxWindSpeed",
+        "Value": "25",
+        "ValueType": "Decimal",
+        "DescriptionType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "MaxWindSpeed"
+          }
+        }
+      },
+      {
+        "Name": "Time Zone",
+        "Value": "Europe/London",
+        "ValueType": "Text",
+        "DescriptionType": "TimeZone",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Time Zone"
+          }
+        }
+      }
+    ],
+    "Parameters": [
+      {
+        "Key": {
+          "FacilityId": 37,
+          "ParameterId": 1
+        },
+        "Name": "Energy",
+        "Units": "kWh",
+        "ParameterType": "TodayEnergy",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Energy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 37,
+          "ParameterId": 2
+        },
+        "Name": "Power",
+        "Units": "kW",
+        "ParameterType": "TotalPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Power"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 37,
+          "ParameterId": 7
+        },
+        "Name": "Ambient Temperature",
+        "Units": "ºC",
+        "ParameterType": "AmbientTemperature",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Ambient Temperature"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 37,
+          "ParameterId": 8
+        },
+        "Name": "Irradiance",
+        "Units": "mps",
+        "ParameterType": "Irradiance",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Irradiance"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 37,
+          "ParameterId": 10
+        },
+        "Name": "Wind Speed",
+        "Units": "mps",
+        "ParameterType": "WindSpeed",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Wind Speed"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 37,
+          "ParameterId": 12
+        },
+        "Name": "Wind Direction",
+        "Units": "Deg",
+        "ParameterType": "WindDirection",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Wind Direction"
+          }
+        }
+      }
+    ],
+    "FixedParameters": null,
+    "ComputedParameters": null,
+    "FacilityImageFileName": null
+  },
+  {
+    "Id": 2,
+    "Descriptions": [
+      {
+        "Name": "PlantName",
+        "Value": "Demo 02 (Belgium)",
+        "ValueType": "Text",
+        "DescriptionType": "Name",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantName"
+          }
+        }
+      },
+      {
+        "Name": "PlantLatitud_Longitud",
+        "Value": "51.2074950677786|3.44808697700501",
+        "ValueType": "GeoLocalization",
+        "DescriptionType": "GeoLocalization",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantLatitud_Longitud"
+          }
+        }
+      },
+      {
+        "Name": "PlantRated_Power",
+        "Value": "120",
+        "ValueType": "Decimal",
+        "DescriptionType": "PeakPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantRated_Power"
+          }
+        }
+      },
+      {
+        "Name": "Situation",
+        "Value": "Lazarusbron 1, 9990 Maldegem, Flemish Region, Belgium",
+        "ValueType": "Text",
+        "DescriptionType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Situation"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "0.7",
+        "ValueType": "Decimal",
+        "DescriptionType": "PanelDegradationCorrectionCoefficient",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "-0.41",
+        "ValueType": "Decimal",
+        "DescriptionType": "TemperatureCorrectionCoefficient",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "Potencia Nominal",
+        "Value": "120",
+        "ValueType": "Decimal",
+        "DescriptionType": "NominalPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Potencia Nominal"
+          }
+        }
+      },
+      {
+        "Name": "Technology",
+        "Value": "Solar",
+        "ValueType": "Text",
+        "DescriptionType": "Technology",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Technology"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "1/1/2010 12:00:00 AM",
+        "ValueType": "DateTime",
+        "DescriptionType": "StartingDate",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "MaxIrradiance",
+        "Value": "1200",
+        "ValueType": "Decimal",
+        "DescriptionType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "MaxIrradiance"
+          }
+        }
+      },
+      {
+        "Name": "Time Zone",
+        "Value": "Europe/Paris",
+        "ValueType": "Text",
+        "DescriptionType": "TimeZone",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Time Zone"
+          }
+        }
+      }
+    ],
+    "Parameters": [
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 1
+        },
+        "Name": "Energy",
+        "Units": "kWh",
+        "ParameterType": "TodayEnergy",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Energy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 2
+        },
+        "Name": "Power",
+        "Units": "kW",
+        "ParameterType": "TotalPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Power"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 3
+        },
+        "Name": "Budgeted PR",
+        "Units": "%",
+        "ParameterType": "EstimatedPerformanceRatio",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted PR"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 4
+        },
+        "Name": "Budgeted Energy",
+        "Units": "kWh",
+        "ParameterType": "EstimatedProduction",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted Energy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 5
+        },
+        "Name": "PR",
+        "Units": "%",
+        "ParameterType": "PerformanceRatio",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PR"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 6
+        },
+        "Name": "Panel Temperature",
+        "Units": "ºC",
+        "ParameterType": "WorkingTemperature",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Panel Temperature"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 8
+        },
+        "Name": "Irradiance",
+        "Units": "W/m2",
+        "ParameterType": "Irradiance",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Irradiance"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 9
+        },
+        "Name": "Insolation",
+        "Units": "kWh/m2",
+        "ParameterType": "Irradiation",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Insolation"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 11
+        },
+        "Name": "Specific Energy",
+        "Units": "kWh/kWp",
+        "ParameterType": "WindSpeedMax",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Specific Energy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 13
+        },
+        "Name": "Availability",
+        "Units": "%",
+        "ParameterType": "Availability",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Availability"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 31
+        },
+        "Name": "Budgeted Availabiliy",
+        "Units": "%",
+        "ParameterType": "AvailabilityBudget",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted Availabiliy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 19
+        },
+        "Name": "Budgeted Availability",
+        "Units": "%",
+        "ParameterType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted Availability"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 23
+        },
+        "Name": "Budgeted Insolation",
+        "Units": "kWh/m2",
+        "ParameterType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted Insolation"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 24
+        },
+        "Name": "Specific Power",
+        "Units": "%",
+        "ParameterType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Specific Power"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 2,
+          "ParameterId": 26
+        },
+        "Name": "Specific Irradiance",
+        "Units": "%",
+        "ParameterType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Specific Irradiance"
+          }
+        }
+      }
+    ],
+    "FixedParameters": null,
+    "ComputedParameters": null,
+    "FacilityImageFileName": null
+  },
+  {
+    "Id": 3,
+    "Descriptions": [
+      {
+        "Name": "PlantName",
+        "Value": "Demo 03 (France)",
+        "ValueType": "Text",
+        "DescriptionType": "Name",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantName"
+          }
+        }
+      },
+      {
+        "Name": "PlantLatitud_Longitud",
+        "Value": "45.3367019099682|1.7578125",
+        "ValueType": "GeoLocalization",
+        "DescriptionType": "GeoLocalization",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantLatitud_Longitud"
+          }
+        }
+      },
+      {
+        "Name": "PlantRated_Power",
+        "Value": "2000",
+        "ValueType": "Decimal",
+        "DescriptionType": "PeakPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantRated_Power"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "0.7",
+        "ValueType": "Decimal",
+        "DescriptionType": "PanelDegradationCorrectionCoefficient",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "-0.41",
+        "ValueType": "Decimal",
+        "DescriptionType": "TemperatureCorrectionCoefficient",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "Potencia Nominal",
+        "Value": "2000",
+        "ValueType": "Decimal",
+        "DescriptionType": "NominalPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Potencia Nominal"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "95",
+        "ValueType": "Decimal",
+        "DescriptionType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "1/1/2012 12:00:00 AM",
+        "ValueType": "DateTime",
+        "DescriptionType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "Technology",
+        "Value": "Solar",
+        "ValueType": "Text",
+        "DescriptionType": "Technology",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Technology"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "6/28/2017 12:00:00 AM",
+        "ValueType": "DateTime",
+        "DescriptionType": "StartingDate",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "Region/State",
+        "Value": "fytkf",
+        "ValueType": "Text",
+        "DescriptionType": "Region",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Region/State"
+          }
+        }
+      },
+      {
+        "Name": "City",
+        "Value": "ykfvjy",
+        "ValueType": "Text",
+        "DescriptionType": "City",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "City"
+          }
+        }
+      },
+      {
+        "Name": "Address",
+        "Value": "jcjc",
+        "ValueType": "Text",
+        "DescriptionType": "Street",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Address"
+          }
+        }
+      },
+      {
+        "Name": "Description",
+        "Value": "jcjc",
+        "ValueType": "Text",
+        "DescriptionType": "Description",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Description"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "value 1",
+        "ValueType": "Text",
+        "DescriptionType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "MaxIrradiance",
+        "Value": "1200",
+        "ValueType": "Decimal",
+        "DescriptionType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "MaxIrradiance"
+          }
+        }
+      },
+      {
+        "Name": "Time Zone",
+        "Value": "Europe/Paris",
+        "ValueType": "Text",
+        "DescriptionType": "TimeZone",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Time Zone"
+          }
+        }
+      }
+    ],
+    "Parameters": [
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 1
+        },
+        "Name": "Energy",
+        "Units": "kWh",
+        "ParameterType": "TodayEnergy",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Energy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 2
+        },
+        "Name": "Power",
+        "Units": "kW",
+        "ParameterType": "TotalPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Power"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 3
+        },
+        "Name": "Budgeted PR",
+        "Units": "%",
+        "ParameterType": "EstimatedPerformanceRatio",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted PR"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 4
+        },
+        "Name": "Budgeted Energy",
+        "Units": "kWh",
+        "ParameterType": "EstimatedProduction",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted Energy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 5
+        },
+        "Name": "PR",
+        "Units": "%",
+        "ParameterType": "PerformanceRatio",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PR"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 6
+        },
+        "Name": "Panel Temperature",
+        "Units": "ºC",
+        "ParameterType": "WorkingTemperature",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Panel Temperature"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 7
+        },
+        "Name": "Ambient Temperature",
+        "Units": "ºC",
+        "ParameterType": "AmbientTemperature",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Ambient Temperature"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 8
+        },
+        "Name": "Irradiance",
+        "Units": "W/m2",
+        "ParameterType": "Irradiance",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Irradiance"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 9
+        },
+        "Name": "Insolation",
+        "Units": "kWh/m2",
+        "ParameterType": "Irradiation",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Insolation"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 11
+        },
+        "Name": "Specific Energy",
+        "Units": "kWh/kWp",
+        "ParameterType": "WindSpeedMax",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Specific Energy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 13
+        },
+        "Name": "Availability",
+        "Units": "%",
+        "ParameterType": "Availability",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Availability"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 31
+        },
+        "Name": "Budgeted Availabiliy",
+        "Units": "%",
+        "ParameterType": "AvailabilityBudget",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted Availabiliy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 19
+        },
+        "Name": "Budgeted Availability",
+        "Units": "%",
+        "ParameterType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted Availability"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 23
+        },
+        "Name": "Budgeted Insolation",
+        "Units": "kWh/m2",
+        "ParameterType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted Insolation"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 24
+        },
+        "Name": "Specific Power",
+        "Units": "%",
+        "ParameterType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Specific Power"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 26
+        },
+        "Name": "Specific Irradiance",
+        "Units": "%",
+        "ParameterType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Specific Irradiance"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 3,
+          "ParameterId": 29
+        },
+        "Name": "Availability with Exceptions",
+        "Units": "%",
+        "ParameterType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Availability with Exceptions"
+          }
+        }
+      }
+    ],
+    "FixedParameters": null,
+    "ComputedParameters": null,
+    "FacilityImageFileName": null
+  },
+  {
+    "Id": 4,
+    "Descriptions": [
+      {
+        "Name": "PlantName",
+        "Value": "Demo 04 (Belgium)",
+        "ValueType": "Text",
+        "DescriptionType": "Name",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantName"
+          }
+        }
+      },
+      {
+        "Name": "PlantLatitud_Longitud",
+        "Value": "50.4321423445426|5.06403207778932",
+        "ValueType": "GeoLocalization",
+        "DescriptionType": "GeoLocalization",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantLatitud_Longitud"
+          }
+        }
+      },
+      {
+        "Name": "PlantRated_Power",
+        "Value": "132.6",
+        "ValueType": "Decimal",
+        "DescriptionType": "PeakPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PlantRated_Power"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "0.7",
+        "ValueType": "Decimal",
+        "DescriptionType": "PanelDegradationCorrectionCoefficient",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "-0.41",
+        "ValueType": "Decimal",
+        "DescriptionType": "TemperatureCorrectionCoefficient",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "Potencia Nominal",
+        "Value": "132.6",
+        "ValueType": "Decimal",
+        "DescriptionType": "NominalPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Potencia Nominal"
+          }
+        }
+      },
+      {
+        "Name": "Technology",
+        "Value": "Solar",
+        "ValueType": "Text",
+        "DescriptionType": "Technology",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Technology"
+          }
+        }
+      },
+      {
+        "Name": null,
+        "Value": "1/1/2010 12:00:00 AM",
+        "ValueType": "DateTime",
+        "DescriptionType": "StartingDate",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": null
+          }
+        }
+      },
+      {
+        "Name": "MaxIrradiance",
+        "Value": "1200",
+        "ValueType": "Decimal",
+        "DescriptionType": "Generic",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "MaxIrradiance"
+          }
+        }
+      },
+      {
+        "Name": "Time Zone",
+        "Value": "Europe/Paris",
+        "ValueType": "Text",
+        "DescriptionType": "TimeZone",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Time Zone"
+          }
+        }
+      }
+    ],
+    "Parameters": [
+      {
+        "Key": {
+          "FacilityId": 4,
+          "ParameterId": 1
+        },
+        "Name": "Energy",
+        "Units": "kW",
+        "ParameterType": "TodayEnergy",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Energy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 4,
+          "ParameterId": 2
+        },
+        "Name": "Power",
+        "Units": "kWh",
+        "ParameterType": "TotalPower",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Power"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 4,
+          "ParameterId": 3
+        },
+        "Name": "Budgeted PR",
+        "Units": "%",
+        "ParameterType": "EstimatedPerformanceRatio",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted PR"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 4,
+          "ParameterId": 4
+        },
+        "Name": "Budgeted Energy",
+        "Units": "kWh",
+        "ParameterType": "EstimatedProduction",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Budgeted Energy"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 4,
+          "ParameterId": 5
+        },
+        "Name": "PR",
+        "Units": "%",
+        "ParameterType": "PerformanceRatio",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "PR"
+          }
+        }
+      },
+      {
+        "Key": {
+          "FacilityId": 4,
+          "ParameterId": 6
+        },
+        "Name": "Panel Temperature",
+        "Units": "ºC",
+        "ParameterType": "WorkingTemperature",
+        "Translations": {
+          "Data": {
+            "en-US:=Name": "Panel Temperature"
+          }
+        }
+      },
+      {
