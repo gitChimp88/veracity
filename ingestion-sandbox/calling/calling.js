@@ -27,7 +27,7 @@ const getToken = async () => {
   }
 }
 
-const getFacilityIds = async () => {
+const getInvertersByFacility = async () => {
   try {
   const response = await getToken();
   // console.log('\n\n\nresponse = ', response)
@@ -56,33 +56,11 @@ const getFacilityIds = async () => {
       [`invertersForFacility${facility}`]: response.data // should be array of inverters
     }
   });
-    
-
 
   // wait until all promises resolve
   const invertersByFacilityArray = await Promise.all(promises)
   // console.log('inverters in each plant? = \n ', JSON.stringify(invertersByFacilityArray, null, 2));
   console.log('inverters in each plant? = \n ', invertersByFacilityArray);
-/* Gives us this array of arrays (each of the nested
-  arrays are a facility) :
-
-[ [ { FacilityId: 1,
-      Type: 'INVERTER',
-      Id: '090b2c34-8af0-4f8d-a540-f491e5853a64',
-      Descriptions: [Array],
-      Parameters: [] },
-    { FacilityId: 1,
-      Type: 'INVERTER',
-      Id: 'b160c3da-8b4b-46b7-9f41-9a4c1c116a51',
-      Descriptions: [Array],
-      Parameters: [] },
-    { FacilityId: 1,
-      Type: 'INVERTER',
-      Id: '4d945c2d-4a7a-4231-b268-941c925b4a6
-
-      ......
-
-*/
 
   } catch (error) {
     console.error(error)
@@ -90,8 +68,8 @@ const getFacilityIds = async () => {
 }
 
 
-// getFacilityIds();
-getFacilityIds()
+// getInvertersByFacility();
+getInvertersByFacility()
 
 
 
