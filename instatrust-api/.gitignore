@@ -3,3 +3,4 @@ DS_STORE
 instatrust_veracity_resources.md
 config.js
 .env
+ingestion-sandbox/.env

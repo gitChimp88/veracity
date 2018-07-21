@@ -62,3 +62,4 @@ typings/
 
 server/env
 ingestion-sandbox/notes-ingest.md
+ingestion-sandbox/.env
