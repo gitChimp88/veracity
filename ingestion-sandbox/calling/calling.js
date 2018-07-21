@@ -2,7 +2,7 @@
 
 // http://robdodson.me/how-to-run-a-node-script-from-the-command-line/
 const axios = require('axios');
-require('dotenv').config();
+require('dotenv').config({path:'/Users/evanhendrix1/programming/code/green-power-monitor/experiment-instatrust/veracity-app/ingestion-sandbox/.env'});
 
 console.log('you. are. AWESOME!');  
 const queryString = require('query-string');
