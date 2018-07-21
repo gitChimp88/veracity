@@ -51,26 +51,18 @@ const getFacilityIds = async () => {
   
   const promises = facilityIdArray.map( async facility => {
     const devicesByTypeInverterURL = `http://192.168.32.124:6600/api/horizon/facilities/${facility}/devices/by-type/INVERTER`;
-      const response = await axios( 
-        devicesByTypeInverterURL, 
-        { headers: { Authorization: authStr }}
-      );
-    // return {
-      // ResponseData: JSON.stringify(response.data, null, 2), 
-      // FacilityId: response.data.FacilityId,
-      // Type: response.data.Type,
-      // Id: response.data.Id,
-      // InvertersInPlantArray: response.data.Parameters
-    // }
-    return response.data;
+    const response = await axios( devicesByTypeInverterURL, { headers: { Authorization: authStr } } );
+    return {
+      invertersForFacility: response.data // should be array of inverters
+    }
   });
     
 
 
   // wait until all promises resolve
   const invertersByFacilityArray = await Promise.all(promises)
-  // console.log('inverters in each plant? = \n ', JSON.stringify(invertersByFacility, null, 2));
-  console.log('inverters in each plant? = \n ', invertersByFacilityArray);
+  console.log('inverters in each plant? = \n ', JSON.stringify(invertersByFacilityArray, null, 2));
+  // console.log('inverters in each plant? = \n ', invertersByFacilityArray);
 /* Gives us this array of arrays (each of the nested
   arrays are a facility) :
 
