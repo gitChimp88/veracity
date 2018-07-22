@@ -75,11 +75,12 @@ const getInvertersByFacility = async () => {
   //   return Parameters.Key  (which has DeviceId and Parameter)
   // now we have one array of objects
   const parAndDevIdsByFacility = invertersByFacilityArrayFlat.map( facility => {
-    return {
+    return facility.Parameters[0] ? {
       FacilityId: facility.FacilityId,
       DeviceId: facility.Parameters[0] ? facility.Parameters[0].Key.DeviceId : 'no device id',
       ParameterId: facility.Parameters[0] ? facility.Parameters[0].Key.ParameterId : 'no ParameterId'
-    } 
+    } :
+    null;
   });
 
   // console.log('parAndDevIdsByFacility = ', JSON.stringify(parAndDevIdsByFacility, null, 2));
@@ -88,13 +89,19 @@ const getInvertersByFacility = async () => {
   const variableIdsByFacilityPromises = parAndDevIdsByFacility.map( async facility => {
     console.log('facility = ', facility)
     const variableIdsByFacilityUrl = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
+    const dummyUrl = 'http://jsonplaceholder.typicode.com/todos';
     const variableIdsByFacilityResponse = await axios.post( 
       variableIdsByFacilityUrl,  
-      { 
-        DeviceId: facility.DeviceId,
-        ParameterId: facility.ParameterId
-      },
-      { headers: { Authorization: authStr }}
+      /* { 
+        userId: '1',
+        title: 'examplestring',
+        completed: false
+       }, */
+     { 
+        DeviceId: facility ? facility.DeviceId : "no facility id",
+        ParameterId: facility ? facility.ParameterId : "no ParameterId"
+       },
+      { headers: { Authorization: authStr } }
     );
     return variableIdsByFacilityResponse.data;
   });
