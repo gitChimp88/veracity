@@ -39,29 +39,67 @@ const getInvertersByFacility = async () => {
   const facilityIdsResponse = await axios( facilitiesURL, { headers: { Authorization: authStr } });
   
   if (facilityIdsResponse.data) {
-    console.log(`Got ${Object.entries(facilityIdsResponse.data).length} facilities`)
+    // console.log(`Got ${Object.entries(facilityIdsResponse.data).length} facilities`)
   }
+
+  // get array of facility ids
   facilityIdsResponse.data.forEach( facility => {
     const facilityIdLocal = (facility.Parameters[0]) ? 
     facilityIdArray.push(facility.Parameters[0].Key.FacilityId) : null;
     return facilityIdLocal;
   });
-  console.log('facilityIdArray = ', facilityIdArray);
-  console.log(facilityIdArray.length, "facilities with a facility id")
-  
+  // console.log('facilityIdArray = ', facilityIdArray);
+  // console.log(facilityIdArray.length, "facilities with a facility id")
+ 
+  // get inverters for each facility
   const promises = facilityIdArray.map( async facility => {
     const devicesByTypeInverterURL = `http://192.168.32.124:6600/api/horizon/facilities/${facility}/devices/by-type/INVERTER`;
     const response = await axios( devicesByTypeInverterURL, { headers: { Authorization: authStr } } );
-    return {
+    /*  return {
       [`invertersForFacility${facility}`]: response.data // should be array of inverters
-    }
+    } */
+    return response.data
   });
 
   // wait until all promises resolve
+  // array of arrays. each child array is a list of inverters for a facility  
   const invertersByFacilityArray = await Promise.all(promises)
   // console.log('inverters in each plant? = \n ', JSON.stringify(invertersByFacilityArray, null, 2));
-  console.log('inverters in each plant? = \n ', invertersByFacilityArray);
+  // console.log('inverters for each plant = \n ', invertersByFacilityArray);
+  
+  // flatten array
+  const invertersByFacilityArrayFlat = flatten(invertersByFacilityArray);
+  // console.log('invertersByFacilityArrayFlat = ', invertersByFacilityArrayFlat);
 
+  // for each inverter (object) in Array:
+  //   return Parameters.Key  (which has DeviceId and Parameter)
+  // now we have one array of objects
+  const parAndDevIdsByFacility = invertersByFacilityArrayFlat.map( facility => {
+    return {
+      FacilityId: facility.FacilityId,
+      DeviceId: facility.Parameters[0] ? facility.Parameters[0].Key.DeviceId : 'no device id',
+      ParameterId: facility.Parameters[0] ? facility.Parameters[0].Key.ParameterId : 'no ParameterId'
+    } 
+  });
+
+  // console.log('parAndDevIdsByFacility = ', JSON.stringify(parAndDevIdsByFacility, null, 2));
+
+
+  const variableIdsByFacilityPromises = parAndDevIdsByFacility.map( async facility => {
+    console.log('facility = ', facility)
+    const variableIdsByFacilityUrl = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
+    const variableIdsByFacilityResponse = await axios.post( 
+      variableIdsByFacilityUrl,  
+      { 
+        DeviceId: facility.DeviceId,
+        ParameterId: facility.ParameterId
+      },
+      { headers: { Authorization: authStr }}
+    );
+    return variableIdsByFacilityResponse.data;
+  });
+  const variableIdsByFacility = await Promise.all(variableIdsByFacilityPromises);
+  console.log('variableIdsByFacility = ', variableIdsByFacility  )
   } catch (error) {
     console.error(error)
   }
@@ -72,7 +110,21 @@ const getInvertersByFacility = async () => {
 getInvertersByFacility()
 
 
+// utility funciton
+function flatten(items) {
+//  console.log('argument to flatten = ', items) 
+  const flat = [];
 
+  items.forEach(item => {
+    if (Array.isArray(item)) {
+      flat.push(...flatten(item));
+    } else {
+      flat.push(item);
+    }
+  });
+
+  return flat;
+}
 
 
 
