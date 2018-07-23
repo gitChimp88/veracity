@@ -38,16 +38,15 @@ const getInvertersByFacility = async () => {
   // console.log('authStr = ', authStr)
   const facilityIdsResponse = await axios( facilitiesURL, { headers: { Authorization: authStr } });
   
-  if (facilityIdsResponse.data) {
+  // if (facilityIdsResponse.data) {
     // console.log(`Got ${Object.entries(facilityIdsResponse.data).length} facilities`)
-  }
+  // }
 
-  // get array of facility ids
+  // make array of facility ids
   facilityIdsResponse.data.forEach( facility => {
-    const facilityIdLocal = (facility.Parameters[0]) ? 
-    facilityIdArray.push(facility.Parameters[0].Key.FacilityId) : null;
-    return facilityIdLocal;
-  });
+    if (facility && facility.Parameters[0]) {
+    facilityIdArray.push(facility.Parameters[0].Key.FacilityId) ;
+  }});
   // console.log('facilityIdArray = ', facilityIdArray);
   // console.log(facilityIdArray.length, "facilities with a facility id")
  
@@ -58,8 +57,9 @@ const getInvertersByFacility = async () => {
     /*  return {
       [`invertersForFacility${facility}`]: response.data // should be array of inverters
     } */
-    return response.data
+    if (response.data) return response.data
   });
+  
 
   // wait until all promises resolve
   // array of arrays. each child array is a list of inverters for a facility  
@@ -69,27 +69,34 @@ const getInvertersByFacility = async () => {
   
   // flatten array
   const invertersByFacilityArrayFlat = flatten(invertersByFacilityArray);
-  // console.log('invertersByFacilityArrayFlat = ', invertersByFacilityArrayFlat);
+  console.log('invertersByFacilityArrayFlat = ', invertersByFacilityArrayFlat);
 
   // for each inverter (object) in Array:
   //   return Parameters.Key  (which has DeviceId and Parameter)
   // now we have one array of objects
-  const parAndDevIdsByFacility = invertersByFacilityArrayFlat.map( facility => {
-    return facility.Parameters[0] ? {
-      FacilityId: facility.FacilityId,
-      DeviceId: facility.Parameters[0] ? facility.Parameters[0].Key.DeviceId : 'no device id',
-      ParameterId: facility.Parameters[0] ? facility.Parameters[0].Key.ParameterId : 'no ParameterId'
-    } :
-    null;
+  const parAndDevIdsByFacility = invertersByFacilityArrayFlat.filter( facility => {
+    if ( facility !== undefined && facility.Parameters[0] !== undefined) { 
+      return  {
+        FacilityId: facility.FacilityId,
+        // DeviceId: facility.Parameters[0].Key.DeviceId ,
+        ParameterId: facility.Parameters[0].Key.ParameterId 
+      }
+    }
   });
 
   // console.log('parAndDevIdsByFacility = ', JSON.stringify(parAndDevIdsByFacility, null, 2));
+  console.log('parAndDevIdsByFacility = ', parAndDevIdsByFacility);
 
 
   const variableIdsByFacilityPromises = parAndDevIdsByFacility.map( async facility => {
-    console.log('facility = ', facility)
+    // console.log('facility = ', facility)
     const variableIdsByFacilityUrl = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
     const dummyUrl = 'http://jsonplaceholder.typicode.com/todos';
+    const requestData = { 
+      DeviceId: facility.DeviceId,
+      ParameterId: facility.ParameterId 
+     };
+    //  console.log('requestData = ', requestData);
     const variableIdsByFacilityResponse = await axios.post( 
       variableIdsByFacilityUrl,  
       /* { 
@@ -97,18 +104,31 @@ const getInvertersByFacility = async () => {
         title: 'examplestring',
         completed: false
        }, */
-     { 
-        DeviceId: facility ? facility.DeviceId : "no facility id",
-        ParameterId: facility ? facility.ParameterId : "no ParameterId"
-       },
+     requestData,
       { headers: { Authorization: authStr } }
     );
     return variableIdsByFacilityResponse.data;
   });
   const variableIdsByFacility = await Promise.all(variableIdsByFacilityPromises);
-  console.log('variableIdsByFacility = ', variableIdsByFacility  )
+  // console.log('variableIdsByFacility = ', variableIdsByFacility  )
   } catch (error) {
-    console.error(error)
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log('Error, request made, but server responded with ...',error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log('Error. Request made but no response recieved....', error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error in setting up request....', error.message);
+      }
+      console.log(error.config);
+    // console.error(error)
   }
 }
 
