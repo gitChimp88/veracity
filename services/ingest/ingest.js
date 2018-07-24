@@ -102,14 +102,19 @@ const getInvertersByFacility = async () => {
       const dummyUrl = 'http://jsonplaceholder.typicode.com/todos';
       const requestData = { 
         DeviceId: facility.DeviceId,
-        ParameterId: facility.ParameterId 
+        ParameterId: facility.ParameterId
       };
       //  console.log('requestData = ', requestData);
-      const variableIdsByFacilityResponse = await axios.post( 
-        variableIdsByFacilityUrl,  
-      requestData,
-        { headers: { Authorization: authStr } }
-      );
+      const variableIdsByFacilityResponse = await axios({
+        method: 'post',
+        url: variableIdsByFacilityUrl,  
+        data: requestData,
+        auth: { headers: { Authorization: authStr } },
+        validateStatus: function (status) {
+          // return true;
+          return status >= 200 && status < 300; // default
+        }
+    });
       return variableIdsByFacilityResponse.data;
     });
     console.error('what is here?', error)
