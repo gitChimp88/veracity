@@ -2,17 +2,16 @@
   "name": "calling",
   "version": "0.0.1",
   "description": "Make calls to gpm+ apis and save to db",
-  "preferGlobal": "true",
-  "bin": {
-    "calling": "calling.js"
-  },
-  "author": "Rob Dodson",
-  "engines": {
-    "node": "*"
-  },
   "dependencies": {
     "axios": "^0.18.0",
+    "debug": "^3.1.0",
     "dotenv": "^6.0.0",
-    "query-string": "^6.1.0"
+    "query-string": "^6.1.0",
+    "strftime": "^0.10.0",
+    "winston": "^3.0.0"
+  },
+  "scripts": {
+    "start": "node . ",
+    "debug": "nodemon --inspect"
   }
 }

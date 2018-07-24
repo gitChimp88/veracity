@@ -1,7 +1,13 @@
 #! /usr/bin/env node
+ 
 
 // http://robdodson.me/how-to-run-a-node-script-from-the-command-line/
 const axios = require('axios');
+/* axios.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  return Promise.reject(error);
+}); */
 require('dotenv').config({path:'/Users/evanhendrix1/programming/code/green-power-monitor/experiment-instatrust/veracity-app/ingestion-sandbox/.env'});
 
 console.log('you. are. AWESOME!');  
@@ -47,7 +53,7 @@ const getInvertersByFacility = async () => {
     if (facility && facility.Parameters[0]) {
     facilityIdArray.push(facility.Parameters[0].Key.FacilityId) ;
   }});
-  // console.log('facilityIdArray = ', facilityIdArray);
+  console.log('facilityIdArray = ', facilityIdArray);
   // console.log(facilityIdArray.length, "facilities with a facility id")
  
   // get inverters for each facility
@@ -75,10 +81,10 @@ const getInvertersByFacility = async () => {
   //   return Parameters.Key  (which has DeviceId and Parameter)
   // now we have one array of objects
   const parAndDevIdsByFacility = invertersByFacilityArrayFlat.filter( facility => {
-    if ( facility !== undefined && facility.Parameters[0] !== undefined) { 
+    if ( facility !== undefined && facility.Parameters[0] !== undefined && facility.Parameters[0].Key) { 
       return  {
         FacilityId: facility.FacilityId,
-        // DeviceId: facility.Parameters[0].Key.DeviceId ,
+        DeviceId: facility.Parameters[0].Key.DeviceId ,
         ParameterId: facility.Parameters[0].Key.ParameterId 
       }
     }
@@ -99,11 +105,6 @@ const getInvertersByFacility = async () => {
     //  console.log('requestData = ', requestData);
     const variableIdsByFacilityResponse = await axios.post( 
       variableIdsByFacilityUrl,  
-      /* { 
-        userId: '1',
-        title: 'examplestring',
-        completed: false
-       }, */
      requestData,
       { headers: { Authorization: authStr } }
     );
@@ -115,9 +116,9 @@ const getInvertersByFacility = async () => {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log('Error, request made, but server responded with ...',error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        console.log('\nError, request made, but server responded with ...',error.response.data);
+        console.log('\nError.response.status = ', error.response.status);
+        console.log('\nError.response.headers = ', error.response.headers);
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -127,15 +128,14 @@ const getInvertersByFacility = async () => {
         // Something happened in setting up the request that triggered an Error
         console.log('Error in setting up request....', error.message);
       }
-      console.log(error.config);
-    // console.error(error)
+      console.log('error.config = \n', error.config);
+    console.error('\n\n\n console.error = \n',error)
   }
 }
 
 
 // getInvertersByFacility();
 getInvertersByFacility()
-
 
 // utility funciton
 function flatten(items) {
@@ -153,7 +153,11 @@ function flatten(items) {
   return flat;
 }
 
-
+      /* { 
+        userId: '1',
+        title: 'examplestring',
+        completed: false
+       }, */
 
 /* 
  axios.post(authURL, queryString.stringify(creds))
