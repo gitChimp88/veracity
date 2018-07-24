@@ -2,6 +2,7 @@
  
 
 // http://robdodson.me/how-to-run-a-node-script-from-the-command-line/
+const to = require('await-to-js').default;
 const axios = require('axios');
 /* axios.interceptors.response.use(function (response) {
   return response;
@@ -44,9 +45,10 @@ const getInvertersByFacility = async () => {
   // console.log('authStr = ', authStr)
   const facilityIdsResponse = await axios( facilitiesURL, { headers: { Authorization: authStr } });
   
-  // if (facilityIdsResponse.data) {
-    // console.log(`Got ${Object.entries(facilityIdsResponse.data).length} facilities`)
-  // }
+
+const makeArrayOfFacilityIds = async () => {
+
+}
 
   // make array of facility ids
   facilityIdsResponse.data.forEach( facility => {
@@ -60,10 +62,11 @@ const getInvertersByFacility = async () => {
   const promises = facilityIdArray.map( async facility => {
     const devicesByTypeInverterURL = `http://192.168.32.124:6600/api/horizon/facilities/${facility}/devices/by-type/INVERTER`;
     const response = await axios( devicesByTypeInverterURL, { headers: { Authorization: authStr } } );
-    /*  return {
+    /* Making dynamic key names: 
+       return {
       [`invertersForFacility${facility}`]: response.data // should be array of inverters
     } */
-    if (response.data) return response.data
+    if (response.data) return response.data // array of inverters
   });
   
 

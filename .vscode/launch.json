@@ -17,7 +17,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/ingestion-sandbox/calling/calling.js",
+            "program": "${workspaceFolder}/services/ingest/ingest.js",
             "smartStep": true,
             "skipFiles": [
                 "${workspaceFolder}/node_modules/**/*.js",
