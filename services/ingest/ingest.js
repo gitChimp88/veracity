@@ -107,8 +107,9 @@ const getInvertersByFacility = async () => {
         save each property to a key in newObject      
 
   */
+    // filter out facilitites that don't have inverters in them
     const invertersByFacilityArray = invertersByFacilityArrayAndZeros.filter( inverter =>  {
-      console.log(inverter.Parameters.length)
+      console.log( 'inverter.Parameters.length = ', inverter.Parameters.length);
       return inverter.Parameters.length > 0
     });
     console.log('invertersByFacilityArray = ', invertersByFacilityArray)
@@ -116,39 +117,51 @@ const getInvertersByFacility = async () => {
 
     const variableIdsByFacilityPromises = invertersByFacilityArray.reduce( async (filtered, inverter) => {
       const variableIdsByFacilityUrl = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
-      // console.log('inverter = ', inverter)
+      // this if is irelevant bc of the filter above. But its good to practice reduce
       if ( inverter.Parameters.length > 0 ) { 
-       let inverterRequestData = inverter.Parameters.map( param => {
-          console.log('param = ', JSON.stringifty(param, null, 2));
-          return {
-          // requestData.[`evanblah'${blah}'`] = blah;
-            'FacilityId': param.FacilityId,
-            'DeviceId': param.Key.DeviceId,
-            'ParameterId': param.Key.ParameterId,
-            'Name': param.Name,
-            'ParameterSubType': param.ParameterSubType,
-            'ParameterType': param.Insolation,
-            'Units': param.Units
-          };
+        let newInverterDataObject = {}; 
+        newInverterDataObject.FacilityId = inverter.FacilityId;
+        newInverterDataObject.Id = inverter.Id;
+
+         inverter.Parameters.forEach( param => {
+           newInverterDataObject.DeviceId =  param.Key.DeviceId;
+           newInverterDataObject.ParameterId =  param.Key.ParameterId;
+           newInverterDataObject.Name =  param.Name;
+           newInverterDataObject.ParameterSubType =  param.ParameterSubType;
+           newInverterDataObject.ParameterType =  param.Insolation;
+           newInverterDataObject.Units =  param.Units;
+        //  let newParam = {
+        //    'FacilityId': param.FacilityId,
+        //    'DeviceId': param.Key.DeviceId,
+        //    'ParameterId': param.Key.ParameterId,
+        //    'Name': param.Name,
+        //    'ParameterSubType': param.ParameterSubType,
+        //    'ParameterType': param.Insolation,
+        //    'Units': param.Units
+          // };
         });
-        return newInverterDataObject;
-       // requestData 
-       console.log('filtered = ', filtered);
-        console.log('inverterRequestData = ', inverterRequestData);
+        console.log('newInverterDataObject = ', JSON.stringify( newInverterDataObject , null, 2));
+        // return newInverterDataObject;
+       const requestData = {
+         'DeviceId': newInverterDataObject.DeviceId,
+         'ParameterId': newInverterDataObject.ParameterId
+       } 
        const variableIdsByFacilityResponse = await axios({
          method: 'post',
          url: variableIdsByFacilityUrl,  
-         data: inverterRequestData,
+         data: requestData,
          auth: { headers: { Authorization: authStr } }
         });
+       //  
         filtered.push(variableIdsByFacilityResponse.Data);
+        console.log('filtered = ', filtered);
       }
     },[]);
 
-
+    console.log('variableIdsByFacilityPromises = ', variableIdsByFacilityPromises)
 
     console.error('what is here?', error) // EXPERIMENT
-    let variableIdsByFacility = await Promise.all(variableIdsByFacilityPromises);
+    let variableIdsByFacility = await some(variableIdsByFacilityPromises);
     console.log('variableIdsByFacility = ', variableIdsByFacility  )
   } catch (error) {
       if (error.response) {
