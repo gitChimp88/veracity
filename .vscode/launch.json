@@ -23,6 +23,7 @@
                 "${workspaceFolder}/node_modules/**/*.js",
                 "${workspaceFolder}/lib/**/*.js"
               ]
+             
         },
         {
             "type": "node",

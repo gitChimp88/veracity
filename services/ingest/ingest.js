@@ -20,11 +20,11 @@ const facilitiesURL = 'http://192.168.32.124:6600/api/horizon/facilities';
 
 const creds = { 'username': process.env.GPM_USERNAME, 'password': process.env.GPM_PASSWORD }
 
-const variableIdsByFacility = Promise.all([]) ;
+// const variableIds = Promise.all([]) ;
 let accessToken;
 let authStr;
 const facilityIdArray = []; 
-const inverterParamsByFacilityArray = [];
+const inverterParamsArray = [];
 
 const getToken = async () => {
   console.log('creds = ', creds)
@@ -37,7 +37,7 @@ const getToken = async () => {
   }
 };
 
-const getInvertersByFacility = async () => {
+const getInverters = async () => {
   try {
     // const getTokenPromise = await axios.post( authURL, creds)
     // getTokenPromise.then(successCallback, failureCallback); 
@@ -70,22 +70,22 @@ const getInvertersByFacility = async () => {
     });
     // response.data && response.data.Parameters && response.data.Parameters.length > 0
 
-    // wait until all promises resolve
+  // wait until all promises resolve
     // array of arrays. each child array is a list of inverters for a facility  
-    const invertersByFacilityArrayNotFlat = await Promise.all(promises)
-    // console.log('inverters in each plant? = \n ', JSON.stringify(invertersByFacilityArrayNotFlat, null, 2));
-    console.log('inverters for each plant = \n ', invertersByFacilityArrayNotFlat);
+    const invertersArrayNotFlat = await Promise.all(promises)
+    // console.log('inverters in each plant? = \n ', JSON.stringify(invertersArrayNotFlat, null, 2));
+    console.log('inverters for each plant = \n ', invertersArrayNotFlat);
     
     // flatten array
-    let invertersByFacilityArrayAndZeros = [].concat.apply([],invertersByFacilityArrayNotFlat);
-    console.log('invertersByFacilityArrayAndZeros = ', invertersByFacilityArrayAndZeros);
+    let invertersArrayAndZeros = [].concat.apply([],invertersArrayNotFlat);
+    // console.log('invertersArrayAndZeros = ', invertersArrayAndZeros);
 
     // for each inverter (object) in Array: return Parameters.Key  (which has
     // DeviceId and Parameter) now we have one array of objects we could reduce
     // like this:
     // https://stackoverflow.com/questions/34398279/map-and-filter-an-array-at-the-same-time-in-javascript
     //
-/*     const parAndDevIdsByFacility = invertersByFacilityArray.reduce( facility => {
+/*     const parAndDevIds = invertersArray.reduce( facility => {
       if ( facility.Parameters[0] !== undefined ) { 
         let dataToKeep =  {
           FacilityId: facility.FacilityId,
@@ -96,10 +96,10 @@ const getInvertersByFacility = async () => {
       } 
     },[]); */
 
-    // console.log('parAndDevIdsByFacility = ',
-    // JSON.stringify(parAndDevIdsByFacility, null, 2));
-    // console.log('parAndDevIdsByFacility = ', parAndDevIdsByFacility);
-    // console.log('invertersByFacilityArrayFlat = ,', invertersByFacilityArray)
+    // console.log('parAndDevIds = ',
+    // JSON.stringify(parAndDevIds, null, 2));
+    // console.log('parAndDevIds = ', parAndDevIds);
+    // console.log('invertersArrayFlat = ,', invertersArray)
 
   /* map over array of facilities and for each facility: 
       const newFacility = {}
@@ -108,61 +108,55 @@ const getInvertersByFacility = async () => {
 
   */
     // filter out facilitites that don't have inverters in them
-    const invertersByFacilityArray = invertersByFacilityArrayAndZeros.filter( inverter =>  {
-      console.log( 'inverter.Parameters.length = ', inverter.Parameters.length);
+    const invertersArray = invertersArrayAndZeros.filter( inverter =>  {
+      // console.log( 'inverter.Parameters.length = ', inverter.Parameters.length);
       return inverter.Parameters.length > 0
     });
-    console.log('invertersByFacilityArray = ', invertersByFacilityArray)
+    console.log('invertersArray = ', invertersArray)
 
 
-    const variableIdsByFacilityPromises = invertersByFacilityArray.reduce( async (filtered, inverter) => {
-      const variableIdsByFacilityUrl = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
-      // this if is irelevant bc of the filter above. But its good to practice reduce
-      if ( inverter.Parameters.length > 0 ) { 
-        let newInverterDataObject = {}; 
-        newInverterDataObject.FacilityId = inverter.FacilityId;
-        newInverterDataObject.Id = inverter.Id;
+    const variableIdsPromises = invertersArray.reduce( async (filtered, inverter) => {
+      try { 
+        const variableIdsURL = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
+          let newInverterDataObject = {}; 
+          newInverterDataObject.FacilityId = inverter.FacilityId;
+          newInverterDataObject.Id = inverter.Id;
 
-         inverter.Parameters.forEach( param => {
-           newInverterDataObject.DeviceId =  param.Key.DeviceId;
-           newInverterDataObject.ParameterId =  param.Key.ParameterId;
-           newInverterDataObject.Name =  param.Name;
-           newInverterDataObject.ParameterSubType =  param.ParameterSubType;
-           newInverterDataObject.ParameterType =  param.Insolation;
-           newInverterDataObject.Units =  param.Units;
-        //  let newParam = {
-        //    'FacilityId': param.FacilityId,
-        //    'DeviceId': param.Key.DeviceId,
-        //    'ParameterId': param.Key.ParameterId,
-        //    'Name': param.Name,
-        //    'ParameterSubType': param.ParameterSubType,
-        //    'ParameterType': param.Insolation,
-        //    'Units': param.Units
-          // };
-        });
-        console.log('newInverterDataObject = ', JSON.stringify( newInverterDataObject , null, 2));
-        // return newInverterDataObject;
-       const requestData = {
-         'DeviceId': newInverterDataObject.DeviceId,
-         'ParameterId': newInverterDataObject.ParameterId
-       } 
-       const variableIdsByFacilityResponse = await axios({
-         method: 'post',
-         url: variableIdsByFacilityUrl,  
-         data: requestData,
-         auth: { headers: { Authorization: authStr } }
-        });
-       //  
-        filtered.push(variableIdsByFacilityResponse.Data);
+          inverter.Parameters.forEach( param => {
+            newInverterDataObject.DeviceId =  param.Key.DeviceId;
+            newInverterDataObject.ParameterId =  param.Key.ParameterId;
+            newInverterDataObject.Name =  param.Name;
+            newInverterDataObject.ParameterSubType =  param.ParameterSubType;
+            newInverterDataObject.ParameterType =  param.Insolation;
+            newInverterDataObject.Units =  param.Units;
+          });
+          console.log('newInverterDataObject = ', JSON.stringify( newInverterDataObject , null, 2));
+          // return newInverterDataObject;
+        const requestData = {
+          'DeviceId': newInverterDataObject.DeviceId,
+          'ParameterId': newInverterDataObject.ParameterId
+        } 
+        const variableIdsResponse = await axios({
+          method: 'post',
+          url: variableIdsURL,  
+          data: requestData,
+          auth: { headers: { Authorization: authStr } }
+          }).catch(() => {});
+
+        filtered.push(variableIdsResponse.Data);
         console.log('filtered = ', filtered);
+        return variableIdsResponse.data;
+      } catch (error) {
+        console.error('Error thrown from inside variableIdsPromises = ', variableIdsPromises);
       }
     },[]);
-
-    console.log('variableIdsByFacilityPromises = ', variableIdsByFacilityPromises)
-
-    console.error('what is here?', error) // EXPERIMENT
-    let variableIdsByFacility = await some(variableIdsByFacilityPromises);
-    console.log('variableIdsByFacility = ', variableIdsByFacility  )
+    // console.log('variableIdsPromises = ', variableIdsPromises)
+    // console.error('what is here?', error) 
+    // let variableIds = await Promise.all(variableIdsPromises).catch(error => {
+      // console.error('something caught after Promise.all? = ', error)
+    // }); // Ex 2
+     await Promise.all(variableIdsPromises);  // Ex 1
+    console.log('variableIds = ', variableIds  )
   } catch (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
@@ -185,8 +179,8 @@ const getInvertersByFacility = async () => {
 }
 
 
-// getInvertersByFacility();
-getInvertersByFacility()
+// getInverters();
+getInverters().catch(() => {});
 
 // utility funcitons
 
@@ -248,4 +242,5 @@ axios.get(facilitiesURL, { headers: { Authorization: authStr } })
       })
       .catch((error) => {
         console.log('error 3 ' + error);
-      }); */
+      }
+*/        
