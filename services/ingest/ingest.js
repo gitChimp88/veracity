@@ -43,7 +43,7 @@ const getInvertersByFacility = async () => {
     // getTokenPromise.then(successCallback, failureCallback); 
     const getTokenPromise = await getToken();
     console.log('\n\n\ngetTokenPromise = ', getTokenPromise)
-    console.log('getTokenPromise.data.AccessToken ' + getTokenPromise.data.AccessToken);
+    console.log('getTokenPromise.data.AccessToken = ', getTokenPromise.data.AccessToken);
     accessToken = await getTokenPromise.data.AccessToken;
     // console.log('accessToken = ', accessToken);
     authStr = 'Bearer '.concat(await accessToken);
@@ -77,8 +77,8 @@ const getInvertersByFacility = async () => {
     console.log('inverters for each plant = \n ', invertersByFacilityArrayNotFlat);
     
     // flatten array
-    const invertersByFacilityArray = [].concat.apply([],invertersByFacilityArrayNotFlat);
-    console.log('invertersByFacilityArray = ', invertersByFacilityArray);
+    let invertersByFacilityArrayAndZeros = [].concat.apply([],invertersByFacilityArrayNotFlat);
+    console.log('invertersByFacilityArrayAndZeros = ', invertersByFacilityArrayAndZeros);
 
     // for each inverter (object) in Array: return Parameters.Key  (which has
     // DeviceId and Parameter) now we have one array of objects we could reduce
@@ -107,15 +107,19 @@ const getInvertersByFacility = async () => {
         save each property to a key in newObject      
 
   */
+    const invertersByFacilityArray = invertersByFacilityArrayAndZeros.filter( inverter =>  {
+      console.log(inverter.Parameters.length)
+      return inverter.Parameters.length > 0
+    });
+    console.log('invertersByFacilityArray = ', invertersByFacilityArray)
 
 
-/* 
     const variableIdsByFacilityPromises = invertersByFacilityArray.reduce( async (filtered, inverter) => {
       const variableIdsByFacilityUrl = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
       // console.log('inverter = ', inverter)
       if ( inverter.Parameters.length > 0 ) { 
        let inverterRequestData = inverter.Parameters.map( param => {
-          console.log('param = ', param)
+          console.log('param = ', JSON.stringifty(param, null, 2));
           return {
           // requestData.[`evanblah'${blah}'`] = blah;
             'FacilityId': param.FacilityId,
@@ -126,11 +130,11 @@ const getInvertersByFacility = async () => {
             'ParameterType': param.Insolation,
             'Units': param.Units
           };
+        });
         return newInverterDataObject;
-       });
        // requestData 
        console.log('filtered = ', filtered);
-       //  console.log('requestData = ', requestData);
+        console.log('inverterRequestData = ', inverterRequestData);
        const variableIdsByFacilityResponse = await axios({
          method: 'post',
          url: variableIdsByFacilityUrl,  
@@ -140,7 +144,7 @@ const getInvertersByFacility = async () => {
         filtered.push(variableIdsByFacilityResponse.Data);
       }
     },[]);
- */
+
 
 
     console.error('what is here?', error) // EXPERIMENT
