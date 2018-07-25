@@ -20,7 +20,6 @@ const facilitiesURL = 'http://192.168.32.124:6600/api/horizon/facilities';
 
 const creds = { 'username': process.env.GPM_USERNAME, 'password': process.env.GPM_PASSWORD }
 
-// const variableIds = Promise.all([]) ;
 let accessToken;
 let authStr;
 const facilityIdArray = []; 
@@ -64,7 +63,7 @@ const getInverters = async () => {
       const response = await axios( devicesByTypeInverterURL, { headers: { Authorization: authStr } } );
       /* Making dynamic key names: 
         return {
-        [`invertersForFacility${facility}`]: response.data // should be array of inverters
+        [`invertersForFacility${facility}`]: response.dat // should be array of inverters
       } */
       if (response.data) return response.data // array of inverters
     });
@@ -115,7 +114,7 @@ const getInverters = async () => {
     console.log('invertersArray = ', invertersArray)
 
 
-    const variableIdsPromises = invertersArray.reduce( async (filtered, inverter) => {
+    const variableIdsPromises = invertersArray.map( async inverter => {
       try { 
         const variableIdsURL = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
           let newInverterDataObject = {}; 
@@ -131,32 +130,32 @@ const getInverters = async () => {
             newInverterDataObject.Units =  param.Units;
           });
           console.log('newInverterDataObject = ', JSON.stringify( newInverterDataObject , null, 2));
-          // return newInverterDataObject;
+          
         const requestData = {
           'DeviceId': newInverterDataObject.DeviceId,
           'ParameterId': newInverterDataObject.ParameterId
-        } 
+        }
+        console.log('requestData = ', JSON.stringify(requestData, null, 2)); 
         const variableIdsResponse = await axios({
           method: 'post',
           url: variableIdsURL,  
           data: requestData,
           auth: { headers: { Authorization: authStr } }
-          }).catch(() => {});
+          });
 
-        filtered.push(variableIdsResponse.Data);
-        console.log('filtered = ', filtered);
         return variableIdsResponse.data;
       } catch (error) {
         console.error('Error thrown from inside variableIdsPromises = ', variableIdsPromises);
       }
-    },[]);
+    });
     // console.log('variableIdsPromises = ', variableIdsPromises)
     // console.error('what is here?', error) 
     // let variableIds = await Promise.all(variableIdsPromises).catch(error => {
       // console.error('something caught after Promise.all? = ', error)
-    // }); // Ex 2
-     await Promise.all(variableIdsPromises);  // Ex 1
-    console.log('variableIds = ', variableIds  )
+      // }); // Ex 2
+      // console.log('variableIds = ', variableIds  )
+     await some(variableIdsPromises);  // Ex 1
+
   } catch (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
