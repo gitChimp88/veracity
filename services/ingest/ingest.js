@@ -132,38 +132,13 @@ const getInverters = async () => {
       return newInverterDataObject;
     });
     console.log('invertersArray = ', invertersArray);
+    
+    
+    
 
+    const inverterPromises = callForVariables(invertersArray)
 
-    const variableIdsPromises = invertersArray.map( async inverter => {
-      try { 
-        const variableIdsURL = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
-        
-          console.log('inverter = ', JSON.stringify( inverter , null, 2));
-          
-        const requestData = {
-          'DeviceId': inverter.DeviceId,
-          'ParameterId': inverter.ParameterId
-        }
-        console.log('requestData = ', JSON.stringify(requestData, null, 2)); 
-        const variableIdsResponse = await axios({
-          method: 'post',
-          url: variableIdsURL,  
-          data: requestData,
-          auth: { headers: { Authorization: authStr } }
-          });
-
-        return variableIdsResponse.data;
-      } catch (error) {
-        console.error('Error thrown from inside variableIdsPromises = ', variableIdsPromises);
-      }
-    });
-    // console.log('variableIdsPromises = ', variableIdsPromises)
-    // console.error('what is here?', error) 
-    // let variableIds = await Promise.all(variableIdsPromises).catch(error => {
-      // console.error('something caught after Promise.all? = ', error)
-      // }); // Ex 2
-      // console.log('variableIds = ', variableIds  )
-     await some(variableIdsPromises)
+     await some(inverterPromises)
       // .then((values) => {
       //   console.log('all loaded YO', values)
       //   return values;
@@ -193,73 +168,98 @@ const getInverters = async () => {
 }
 
 
-getInverters();
-/* getInverters().then((values) => {
-  console.log('all loaded YO', values)
-  return values;
-}, function() {
-  console.log('stuff failed')
-});  */
 
-// utility funcitons
+// takes array of promises and returns array of variables
+function callForVariables(arr) {
+  const variableIdPromises = arr.map( async inverter => {
+    try { 
+      const variableIdURL = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
+      console.log('inverter = ', JSON.stringify( inverter , null, 2));
+      const requestData = {
+        'DeviceId': inverter.DeviceId,
+        'ParameterId': inverter.ParameterId
+      }
+      // const dummyRequestData = { 
+      //   userId: '1',
+      //   title: 'examplestring',
+      //   completed: false
+      // }
 
-/* 
-function flatten(items) {
-//  console.log('argument to flatten = ', items) 
-  const flat = [];
-
-  items.forEach(item => {
-    if (Array.isArray(item)) {
-      flat.push(...flatten(item));
+      console.log('requestData = ', JSON.stringify(requestData, null, 2)); 
+      const variableIdResponse = await axios({
+        method: 'post',
+        url: variableIdURL,  
+        data: requestData,
+        auth: { headers: { Authorization: authStr } }
+      });
+      // add returned variable to object, then return
+      let retObj = inverter;
+      retObj.variableName = variableIdResponse.data
+      
+      return retObj;
+      
+    } catch (error) {
+      console.error('Error thrown from inside variableIdsPromises = ', variableIdPromises);
     }
-    if (isAnObject) {
-      // parse over that?
-    }  
-    else {
-      flat.push(item);
-    }
-  });
-
-  return flat;
-} */
-
-function some( promises, count = 1 ){
-
-  const wrapped = promises.map( promise => promise.then(value => ({ success: true, value }), () => ({ success: false })) );
-  return Promise.all( wrapped ).then(function(results){
-     const successful = results.filter(result => result.success);
-     if( successful.length < count )
-        throw new Error("Only " + successful.length + " resolved.")
-     return successful.map(result => result.value);
-  });
-
-}
-
-
-      /* { 
-        userId: '1',
-        title: 'examplestring',
-        completed: false
-       }, */
-
-/* 
- axios.post(authURL, queryString.stringify(creds))
-  .then(response => {
-    console.log(response.data);
-    USER_TOKEN = response.data.AccessToken;
-    const authStr = 'Bearer '.concat(USER_TOKEN);
-    console.log('userresponse ' + response.data.AccessToken);
-  })
-  .catch((error) => {
-    console.log('error ' + error);
   });
   
-axios.get(facilitiesURL, { headers: { Authorization: authStr } })
-.then(response => {
-        // If request is good...
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log('error 3 ' + error);
+  // console.log('variableIdsPromises = ', variableIdsPromises)
+  // console.error('what is here?', error) 
+  // let variableIds = await Promise.all(variableIdsPromises).catch(error => {
+    // console.error('something caught after Promise.all? = ', error)
+    // }); // Ex 2
+    // console.log('variableIds = ', variableIds  )
+    return variableIdPromises;
+  }
+  
+  /* getInverters().then((values) => {
+    console.log('all loaded YO', values)
+    return values;
+  }, function() {
+    console.log('stuff failed')
+  });  */
+  
+  // utility funcitons
+  
+  /* 
+  function flatten(items) {
+    //  console.log('argument to flatten = ', items) 
+    const flat = [];
+    
+    items.forEach(item => {
+      if (Array.isArray(item)) {
+        flat.push(...flatten(item));
       }
-*/        
+      if (isAnObject) {
+        // parse over that?
+      }  
+      else {
+        flat.push(item);
+      }
+    });
+    
+    return flat;
+  } */
+  
+  function some( promises, count = 1 ){
+    
+    const wrapped = promises.map( promise => promise.then(value => ({ success: true, value }), () => ({ success: false })) );
+    return Promise.all( wrapped ).then(function(results){
+      const successful = results.filter(result => result.success);
+      if( successful.length < count )
+      throw new Error("Only " + successful.length + " resolved.")
+      return successful.map(result => result.value);
+    });
+    
+  }
+  
+  
+  /* { 
+    userId: '1',
+    title: 'examplestring',
+    completed: false
+  }, */
+  
+  
+ 
+ getInverters();
