@@ -154,7 +154,11 @@ const getInverters = async () => {
       // console.error('something caught after Promise.all? = ', error)
       // }); // Ex 2
       // console.log('variableIds = ', variableIds  )
-     await some(variableIdsPromises);  // Ex 1
+     await some(variableIdsPromises).then((values) => {
+      console.log('all loaded YO', values)
+    }, function() {
+      console.log('stuff failed')
+    }); 
 
   } catch (error) {
       if (error.response) {
