@@ -1,5 +1,7 @@
 // https://codeburst.io/how-to-call-api-in-a-smart-way-2ca572c6fe86const express = require('express');
 
+
+const express = require('express');
 const router = express.Router();
 
 // Fetch authentication configuration
