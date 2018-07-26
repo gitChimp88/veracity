@@ -68,8 +68,7 @@
     "url": "https://github.com/veracity/generator-veracity/issues"
   },
   "scripts": {
-    "client": "cd ../insta-test-front && PORT=3001 HTTPS=true yarn start",
-    "server": "nodemon start",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "dev": "nodemon PORT=3000 --inspect=0.0.0.0:9229 start.js",
+    "buildFrontAndDev": "cd ../instatrust-test-front && yarn build && cd ../instatrust-api && nodemon --inspect start"
   }
 }

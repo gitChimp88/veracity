@@ -115,21 +115,23 @@ const getInverters = async () => {
     });
     // console.log('invertersArrayFiltered = ', invertersArrayFiltered)
 
-    const invertersArray = [];
-    invertersArrayFiltered.forEach( inverter => { 
+    const invertersArray = invertersArrayFiltered.reduce(accumulatorArr, inverter => { 
+
       inverter.Parameters.forEach( param => {
-        let newInverterDataObject = {}; 
-        newInverterDataObject.FacilityId = inverter.FacilityId;
-        newInverterDataObject.Id = inverter.Id;
-        newInverterDataObject.DeviceId =  param.Key.DeviceId;
-        newInverterDataObject.ParameterId =  param.Key.ParameterId;
-        newInverterDataObject.Name =  param.Name;
-        newInverterDataObject.ParameterSubType =  param.ParameterSubType;
-        newInverterDataObject.ParameterType =  param.Insolation;
-        newInverterDataObject.Units =  param.Units;
-        
-        invertersArray.push(newInverterDataObject);
-      });
+        if ( param.Name == 'Energy') {
+          let newInverterDataObject = {}; 
+          newInverterDataObject.FacilityId = inverter.FacilityId;
+          newInverterDataObject.Id = inverter.Id;
+          newInverterDataObject.DeviceId =  param.Key.DeviceId;
+          newInverterDataObject.ParameterId =  param.Key.ParameterId;
+          newInverterDataObject.Name =  param.Name;
+          newInverterDataObject.ParameterSubType =  param.ParameterSubType;
+          newInverterDataObject.ParameterType =  param.Insolation;
+          newInverterDataObject.Units =  param.Units;
+
+          accumulatorArr.push(newInverterDataObject);
+        } 
+      }, []);
 
       // console.log('newInverterDataObject = ', JSON.stringify( newInverterDataObject , null, 2));
 
