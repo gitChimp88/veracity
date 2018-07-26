@@ -4,6 +4,8 @@
 // http://robdodson.me/how-to-run-a-node-script-from-the-command-line/
 const to = require('await-to-js').default;
 const axios = require('axios');
+var async = require("async");
+
 /* axios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
@@ -54,7 +56,7 @@ const getInverters = async () => {
       if (facility && facility.Parameters[0]) {
       facilityIdArray.push(facility.Parameters[0].Key.FacilityId) ;
     }});
-    console.log('facilityIdArray = ', facilityIdArray);
+    // console.log('facilityIdArray = ', facilityIdArray);
     // console.log(facilityIdArray.length, "facilities with a facility id")
   
     // get inverters for each facility
@@ -113,7 +115,7 @@ const getInverters = async () => {
     });
     // console.log('invertersArrayFiltered = ', invertersArrayFiltered)
 
-    const invertersArray = invertersArrayFiltered.map( async inverter => {
+    const invertersArray = invertersArrayFiltered.map( inverter => { 
       let newInverterDataObject = {}; 
       newInverterDataObject.FacilityId = inverter.FacilityId;
       newInverterDataObject.Id = inverter.Id;
@@ -131,20 +133,16 @@ const getInverters = async () => {
 
       return newInverterDataObject;
     });
-    console.log('invertersArray = ', invertersArray);
-    
-    
-    
 
-    const inverterPromises = callForVariables(invertersArray)
+    callForVariables(invertersArray)
 
-     await some(inverterPromises)
-      // .then((values) => {
-      //   console.log('all loaded YO', values)
-      //   return values;
-      // }, function() {
-      //   console.log('stuff failed')
-      // }); 
+    //  await Promise.all(inverterPromises)
+    //   .then((values) => {
+    //     console.log('all loaded YO', values)
+    //     return values;
+    //   }, function() {
+    //     console.log('stuff failed')
+    //   }); 
 
   } catch (error) {
       if (error.response) {
@@ -167,24 +165,19 @@ const getInverters = async () => {
   }
 }
 
-
-
 // takes array of promises and returns array of variables
-function callForVariables(arr) {
+ function callForVariables(arr) {
+  console.log( 'Array of promises input to callForVariables = ', arr);
+  const variableIdURL = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
+  let requestData = {};
   const variableIdPromises = arr.map( async inverter => {
     try { 
-      const variableIdURL = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
       console.log('inverter = ', JSON.stringify( inverter , null, 2));
-      const requestData = {
-        'DeviceId': inverter.DeviceId,
-        'ParameterId': inverter.ParameterId
-      }
-      // const dummyRequestData = { 
-      //   userId: '1',
-      //   title: 'examplestring',
-      //   completed: false
-      // }
-
+      await inverter.then( data => 
+        requestData = {
+        'DeviceId':  data.DeviceId,
+        'ParameterId':  data.ParameterId
+      });
       console.log('requestData = ', JSON.stringify(requestData, null, 2)); 
       const variableIdResponse = await axios({
         method: 'post',
@@ -192,24 +185,27 @@ function callForVariables(arr) {
         data: requestData,
         auth: { headers: { Authorization: authStr } }
       });
+      console.log('variableIdResponse.data = ', variableIdResponse)
       // add returned variable to object, then return
       let retObj = inverter;
-      retObj.variableName = variableIdResponse.data
+      retObj.variableName = variableIdResponse.data;
       
-      return retObj;
+      if (variableIdResponse.data) return retObj;
       
     } catch (error) {
       console.error('Error thrown from inside variableIdsPromises = ', variableIdPromises);
     }
   });
   
-  // console.log('variableIdsPromises = ', variableIdsPromises)
-  // console.error('what is here?', error) 
-  // let variableIds = await Promise.all(variableIdsPromises).catch(error => {
-    // console.error('something caught after Promise.all? = ', error)
-    // }); // Ex 2
-    // console.log('variableIds = ', variableIds  )
-    return variableIdPromises;
+  
+ return Promise.all(variableIdPromises)
+      .then((values) => {
+        console.log('all loaded YO', values)
+        return values;
+      }, function() {
+        console.log('stuff failed')
+      }); 
+
   }
   
   /* getInverters().then((values) => {
@@ -220,46 +216,25 @@ function callForVariables(arr) {
   });  */
   
   // utility funcitons
+    
   
-  /* 
-  function flatten(items) {
-    //  console.log('argument to flatten = ', items) 
-    const flat = [];
-    
-    items.forEach(item => {
-      if (Array.isArray(item)) {
-        flat.push(...flatten(item));
-      }
-      if (isAnObject) {
-        // parse over that?
-      }  
-      else {
-        flat.push(item);
-      }
-    });
-    
-    return flat;
-  } */
-  
-  function some( promises, count = 1 ){
-    
-    const wrapped = promises.map( promise => promise.then(value => ({ success: true, value }), () => ({ success: false })) );
-    return Promise.all( wrapped ).then(function(results){
+ function some( promises, count = 1 ){
+ 
+ const wrapped = promises.map( promise => promise.then(value => ({ success: true, value }), () => ({ success: false })) );
+  return Promise.all( wrapped ).then(function(results){
       const successful = results.filter(result => result.success);
-      if( successful.length < count )
-      throw new Error("Only " + successful.length + " resolved.")
-      return successful.map(result => result.value);
-    });
-    
-  }
-  
-  
-  /* { 
+       if( successful.length < count )
+            throw new Error("Only " + successful.length + " resolved.")
+            return successful.map(result => result.value);
+  });
+ }
+
+
+/* { 
     userId: '1',
     title: 'examplestring',
     completed: false
-  }, */
-  
+  } */
   
  
  getInverters();
