@@ -115,23 +115,24 @@ const getInverters = async () => {
     });
     // console.log('invertersArrayFiltered = ', invertersArrayFiltered)
 
-    const invertersArray = invertersArrayFiltered.map( inverter => { 
-      let newInverterDataObject = {}; 
-      newInverterDataObject.FacilityId = inverter.FacilityId;
-      newInverterDataObject.Id = inverter.Id;
-
+    const invertersArray = [];
+    invertersArrayFiltered.forEach( inverter => { 
       inverter.Parameters.forEach( param => {
+        let newInverterDataObject = {}; 
+        newInverterDataObject.FacilityId = inverter.FacilityId;
+        newInverterDataObject.Id = inverter.Id;
         newInverterDataObject.DeviceId =  param.Key.DeviceId;
         newInverterDataObject.ParameterId =  param.Key.ParameterId;
         newInverterDataObject.Name =  param.Name;
         newInverterDataObject.ParameterSubType =  param.ParameterSubType;
         newInverterDataObject.ParameterType =  param.Insolation;
         newInverterDataObject.Units =  param.Units;
+        
+        invertersArray.push(newInverterDataObject);
       });
 
       // console.log('newInverterDataObject = ', JSON.stringify( newInverterDataObject , null, 2));
 
-      return newInverterDataObject;
     });
 
     callForVariables(invertersArray)
@@ -173,27 +174,29 @@ const getInverters = async () => {
   const variableIdPromises = arr.map( async inverter => {
     try { 
       console.log('\n\n\n\n\n');
-      // console.log('inverter = ', JSON.stringify( inverter , null, 2));
+      console.log('inverter = ', JSON.stringify( inverter , null, 2));
         requestData = {
         'DeviceId':  inverter.DeviceId,
         'ParameterId':  inverter.ParameterId
       }
 
       let requestObj = {
-        method: 'post',
         url: variableIdURL,  
         data: requestData,
-        auth: { headers: { Authorization: authStr } }
+        auth: { headers: { Authorization: authStr } },
+        withCredentials: true
       }
+
       console.log('object passed to axios = ', JSON.stringify( requestObj, null, 2 ))
-      // console.log('requestData = ', JSON.stringify(requestData, null, 2)); 
+      console.log('requestData = ', JSON.stringify(requestData, null, 2)); 
       const variableIdResponse = await axios(requestObj);
       console.log('variableIdResponse.data = ', variableIdResponse.data)
-      // add returned variable to object, then return
+/*       // add returned variable to object, then return
       let retObj = inverter;
       retObj.variableName = variableIdResponse.data;
-      
       if (variableIdResponse.data) return retObj;
+       */
+      if (variableIdResponse.data) return variableIdResponse.data;
       
     } catch (error) {
       if (error.response) {
