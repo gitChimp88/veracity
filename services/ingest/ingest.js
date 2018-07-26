@@ -155,7 +155,7 @@ const getInverters = async () => {
         // The request was made but no response was received `error.request` is
         // an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log('Error. Request made but no response recieved....', error.request);
+        console.log('Error. Request made but no response received....', error.request);
       } else {
         // Something happened in setting up the request that triggered an Error
         console.log('Error in setting up request....', error.message);
@@ -172,20 +172,23 @@ const getInverters = async () => {
   let requestData = {};
   const variableIdPromises = arr.map( async inverter => {
     try { 
-      console.log('inverter = ', JSON.stringify( inverter , null, 2));
-      await inverter.then( data => 
+      console.log('\n\n\n\n\n');
+      // console.log('inverter = ', JSON.stringify( inverter , null, 2));
         requestData = {
-        'DeviceId':  data.DeviceId,
-        'ParameterId':  data.ParameterId
-      });
-      console.log('requestData = ', JSON.stringify(requestData, null, 2)); 
-      const variableIdResponse = await axios({
+        'DeviceId':  inverter.DeviceId,
+        'ParameterId':  inverter.ParameterId
+      }
+
+      let requestObj = {
         method: 'post',
         url: variableIdURL,  
         data: requestData,
         auth: { headers: { Authorization: authStr } }
-      });
-      console.log('variableIdResponse.data = ', variableIdResponse)
+      }
+      console.log('object passed to axios = ', JSON.stringify( requestObj, null, 2 ))
+      // console.log('requestData = ', JSON.stringify(requestData, null, 2)); 
+      const variableIdResponse = await axios(requestObj);
+      console.log('variableIdResponse.data = ', variableIdResponse.data)
       // add returned variable to object, then return
       let retObj = inverter;
       retObj.variableName = variableIdResponse.data;
@@ -193,8 +196,24 @@ const getInverters = async () => {
       if (variableIdResponse.data) return retObj;
       
     } catch (error) {
-      console.error('Error thrown from inside variableIdsPromises = ', variableIdPromises);
-    }
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log('\nError, request made, but server responded with ...', error.response.data);
+        console.log('\nError.response.status = ', error.response.status);
+        console.log('\nError.response.headers = ', error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received `error.request` is
+        // an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log('Error. Request made but no response recieved....', error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error in setting up request....', error.message);
+      }
+      console.log('error.config = \n', error.config);
+    console.error('\n\n\n console.error = \n',error)
+  }
   });
   
   
