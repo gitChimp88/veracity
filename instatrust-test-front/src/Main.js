@@ -132,7 +132,7 @@ class Main extends Component {
                 </div>
               ) : (
                 <div className="links">
-                  <a href="https://localhost:3000/login"> Login </a>
+                  <a href="/login"> Login </a>
                   <Link to="/signup">/signup</Link>
                 </div>
               )}

@@ -113,29 +113,27 @@ const getInverters = async () => {
       // console.log( 'inverter.Parameters.length = ', inverter.Parameters.length);
       return inverter.Parameters.length > 0
     });
-    // console.log('invertersArrayFiltered = ', invertersArrayFiltered)
+    console.log('invertersArrayFiltered = ', invertersArrayFiltered)
 
-    const invertersArray = invertersArrayFiltered.reduce(accumulatorArr, inverter => { 
+    const invertersArray = invertersArrayFiltered.map((inverter, indexO) => { 
+      console.log('\n\n**************\n inverter: ', inverter, 'indexO: ', indexO);
+      let tempObj = {}
+      // filter this inverter.Parameters array, return resulting object
+      let newObj = inverter.Parameters.filter( param => param.Name == 'Energy');
+        // add preperties you need from the inverter level, then return to map
+        // the whole object; this will build the 'invertersArray'
+        tempObj.DeviceId =  newObj[0].Key.DeviceId;
+        tempObj.ParameterId =  newObj[0].Key.ParameterId;
+        tempObj.Name =  newObj[0].Name;
+        tempObj.ParameterSubType =  newObj[0].ParameterSubType;
+        tempObj.ParameterType =  newObj[0].Insolation;
+        tempObj.Units =  newObj[0].Units;
+        tempObj.FacilityId = inverter.FacilityId;
+        tempObj.Id = inverter.Id;
+       return tempObj;
+      });
 
-      inverter.Parameters.forEach( param => {
-        if ( param.Name == 'Energy') {
-          let newInverterDataObject = {}; 
-          newInverterDataObject.FacilityId = inverter.FacilityId;
-          newInverterDataObject.Id = inverter.Id;
-          newInverterDataObject.DeviceId =  param.Key.DeviceId;
-          newInverterDataObject.ParameterId =  param.Key.ParameterId;
-          newInverterDataObject.Name =  param.Name;
-          newInverterDataObject.ParameterSubType =  param.ParameterSubType;
-          newInverterDataObject.ParameterType =  param.Insolation;
-          newInverterDataObject.Units =  param.Units;
 
-          accumulatorArr.push(newInverterDataObject);
-        } 
-      }, []);
-
-      // console.log('newInverterDataObject = ', JSON.stringify( newInverterDataObject , null, 2));
-
-    });
 
     callForVariables(invertersArray)
 

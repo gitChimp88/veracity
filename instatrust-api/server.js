@@ -33,7 +33,7 @@ const app = express(); // Initialize an expressjs application instance.
 // EXPERIMENT: experiment to fix 'Cannot POST /' error
 // app.use(express.static(path.join(__dirname, '../insta-test-front/public')));
 // app.use(express.static(path.join(__dirname, 'static')));
-app.use(express.static(path.join(__dirname, 'build')));
+// app.use(express.static(path.join(__dirname, 'build')));
 
 
 app.use(bodyParser.json());
@@ -59,18 +59,18 @@ app.use(morgan('dev'));
     we have configured the stuff we need in start.js
 */
 const start = () => {
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || serverConfig.port;
   // Instruct our server to start listening for requests.
   server.listen( port, () => {
-    console.log(`HTTPS server ready and listening for connections @ https://localhost:${serverConfig.port}`);
+    console.log(`HTTPS server ready and listening for connections @ https://localhost:${port}`);
   }).on('error', error => { // Add an error handler to log common errors
     switch (error.code){
       case 'EACCES':
-        console.error(`Unable to bind to port ${serverConfig.port}. Insufficient priveliges.`);
+        console.error(`Unable to bind to port ${port}. Insufficient priveliges.`);
         process.exit(1);
         break;
       case 'EADDRINUSE':
-        console.error(`Unable to bind to port ${serverConfig.port}. It's already in use.`);
+        console.error(`Unable to bind to port ${port}. It's already in use.`);
         process.exit(1);
         break;
       default:
