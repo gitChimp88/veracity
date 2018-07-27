@@ -181,10 +181,10 @@ const getInverters = async () => {
       }
 
       let requestObj = {
+        method: "post",
         url: variableIdURL,  
         data: requestData,
-        auth: { headers: { Authorization: authStr } },
-        withCredentials: true
+        auth: { headers: { Authorization: authStr } }
       }
 
       console.log('object passed to axios = ', JSON.stringify( requestObj, null, 2 ))
