@@ -17,33 +17,20 @@ console.log('you. are. AWESOME!');
 const queryString = require('query-string');
 
 // ingest data with axios 
-const authURL = 'http://192.168.32.124:6600/api/Account/Token?api_key=horizon';
-const facilitiesURL = 'http://192.168.32.124:6600/api/horizon/facilities';
 
-const creds = { 'username': process.env.GPM_USERNAME, 'password': process.env.GPM_PASSWORD }
 
-let accessToken;
-let authStr;
-const facilityIdArray = []; 
-const inverterParamsArray = [];
-let bearerConfig = { headers: { 'Authorization': authStr } }
 
-const getToken = async () => {
-	console.log('creds = ', creds)
+const getInverterVariableNames = async () => {
 	try {
-		console.log('creds = ', creds)
-		return await axios.post( authURL, creds);
+		const facilitiesURL = 'http://192.168.32.124:6600/api/horizon/facilities';
+		const creds = { 'username': process.env.GPM_USERNAME, 'password': process.env.GPM_PASSWORD }
+		let accessToken;
+		let authStr;
+		const facilityIdArray = []; 
+		const inverterParamsArray = [];
+		let bearerConfig = { headers: { 'Authorization': authStr } };
 
-	} catch (error) {
-		console.error(error)
-	}
-};
-
-const getInverters = async () => {
-	try {
-		// const getTokenPromise = await axios.post( authURL, creds)
-		// getTokenPromise.then(successCallback, failureCallback); 
-		const getTokenPromise = await getToken();
+		const getTokenPromise = await getToken(creds);
 		// console.log('\n\n\ngetTokenPromise = ', getTokenPromise)
 		console.log('getTokenPromise.data.AccessToken = ', getTokenPromise.data.AccessToken);
 		accessToken = await getTokenPromise.data.AccessToken;
@@ -134,15 +121,9 @@ const getInverters = async () => {
 			 return tempObj;
 			});
 
-		callForVariables(invertersArray, bearerConfig)
+		callForVariables(invertersArray, authStr)
 
-		//  await Promise.all(inverterPromises)
-		//   .then((values) => {
-		//     console.log('all loaded YO', values)
-		//     return values;
-		//   }, function() {
-		//     console.log('stuff failed')
-		//   }); 
+	
 
 	} catch (error) {
 			if (error.response) {
@@ -164,9 +145,20 @@ const getInverters = async () => {
 		console.error('\n\n\n console.error = \n',error)
 	}
 }
+async function getToken (credsParam) {
+	const authURL = 'http://192.168.32.124:6600/api/Account/Token?api_key=horizon';
+	console.log('creds = ', credsParam)
+	try {
+		console.log('credsParam = ', credsParam)
+		return await axios.post( authURL, credsParam);
+
+	} catch (error) {
+		console.error(error)
+	}
+};
 
 // takes array of promises and returns array of variables
- function callForVariables(arr, config) {
+ function callForVariables(arr, authStr) {
 	console.log( 'Array of promises input to callForVariables = ', arr);
 	const variableIdURL = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
 	let requestData = {};
@@ -188,7 +180,7 @@ const getInverters = async () => {
 			// console.log('object passed to axios = ', JSON.stringify( requestObj, null, 2 ))
       // console.log('requestData = ', JSON.stringify(requestData, null, 2)); 
       
-			const variableIdResponse = await axios.post(variableIdURL, requestData, config);
+			const variableIdResponse = await axios.post(variableIdURL, requestData, { headers: { Authorization: authStr } });
 			console.log('variableIdResponse.data = ', variableIdResponse.data)
 /*       // add returned variable to object, then return
 			let retObj = inverter;
@@ -222,7 +214,7 @@ const getInverters = async () => {
  return Promise.all(variableIdPromises)
 			.then((values) => {
 				console.log('all loaded YO', values)
-				return values;
+				return JSON.stringify(values);
 			}, function() {
 				console.log('stuff failed')
 			}); 
@@ -249,4 +241,4 @@ const getInverters = async () => {
 	} */
 	
  
- getInverters();
+ getInverterVariableNames();
