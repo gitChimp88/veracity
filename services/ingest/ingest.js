@@ -139,7 +139,12 @@ async function getBearerString (credsParam) {
 				'DeviceId':  inverter.DeviceId,
 				'ParameterId': inverter.ParameterId
 			}
-			const variableIdResponse = await axios.post(variableIdURL, requestData,  { headers: { 'Authorization': authString }});
+			const variableIdResponse = await axios({
+				method: 'post',
+				url: variableIdURL,
+				data: requestData,  
+				headers: { 'Authorization': authString }
+			});
 				/*       // add returned variable to object, then return
 				let retObj = inverter;
 				retObj.variableName = variableIdResponse.data;
