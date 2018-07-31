@@ -1,11 +1,6 @@
 #! /usr/bin/env node
- 
-
 // http://robdodson.me/how-to-run-a-node-script-from-the-command-line/
-const to = require('await-to-js').default;
 const axios = require('axios');
-var async = require("async");
-
 
 require('dotenv').config({path:'/Users/evanhendrix1/programming/code/green-power-monitor/experiment-instatrust/veracity-app/services/.env'});
 
@@ -16,7 +11,7 @@ const queryString = require('query-string');
 
 
 
-const getEnergy = async (pOi) => {
+const ingestEnergy = async (iOp) => {
   try {
     const facilitiesURL = 'http://192.168.32.124:6600/api/horizon/facilities';
     const variableIdURL = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
@@ -74,14 +69,9 @@ const getEnergy = async (pOi) => {
        return tempObj;
       });
 
-    if (pOi === 'inverter') {
-      callForVariables(invertersArray, authString, variableIdURL, pOi)
-    } else if (pOi === 'plant' ) {
-      callForVariables(plantArray, authString, variableIdURL, pOi)
-    } else {
-      console.log('input plant or inverter as string') 
-      return;
-    }
+      // this should be piped to the getData function
+      callForVariables(invertersArray, authString, variableIdURL, iOp)
+      getData();
 
   } catch (error) {
       if (error.response) {
@@ -104,9 +94,6 @@ const getEnergy = async (pOi) => {
   }
 }
 
-
-
-
 async function getBearerString (credsParam) {
   const authURL = 'http://192.168.32.124:6600/api/Account/Token?api_key=horizon';
   // console.log('creds = ', credsParam)
@@ -127,9 +114,14 @@ async function getBearerString (credsParam) {
 // function getDeviceParametersForIrradiance callForVariables(x, y, z)
 
 // takes array of object with parameters and info for elements, and returns array of variables
- function callForVariables(arr, authString, varUrlParam, pOi) {
-  console.log( 'Array input to callForVariables = ', arr);
-  const variableIdURL = 'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter';
+ function callForVariables(arr, authString, varUrlParam, iOp) {
+  //  console.log( 'Array input to callForVariables = ', arr);
+   if (!['plant','inverter'].includes(iOp)) {
+     console.error('You\'re using callForVariables wrong! It takes plant or string');
+   }
+  const variableIdURL = (iOp === 'inverter') ?
+   'http://192.168.32.124:6600/api/horizon/parametertovariable/deviceparameter' :
+   'http://192.168.32.124:6600/api/horizon/parametertovariable/facilityparameter';
   let requestData = {};
   const variableIdPromises = arr.map( async inverter => {
     try { 
@@ -148,7 +140,7 @@ async function getBearerString (credsParam) {
         retObj.variableName = variableIdResponse.data;
         if (variableIdResponse.data) return retObj;
         */
-        console.log( 'response = ', variableIdResponse)
+        // console.log( 'response = ', variableIdResponse)
         if (variableIdResponse.data) return variableIdResponse.data;
       
     } catch (error) {
@@ -174,22 +166,82 @@ async function getBearerString (credsParam) {
     return Promise.all(variableIdPromises)
       .then((rawValues) => {
         console.log('rawValues', rawValues)
-        let values = rawValues.filter(val => val)	
-                              .map( filVal => ( {
-                                  FacilityId: filVal.Key.FacilityId,
-                                  DeviceId: filVal.Key.DeviceId,
-                                  VariableId: filVal.Key.VariableId,
-                                  Name: filVal.Name,
-                                  Unit: filVal.Unit
+        let values = rawValues.filter(rawVal => rawVal)	
+                              .map( val => ( {
+                                  FacilityId: val.Key.FacilityId,
+                                  DeviceId: val.Key.DeviceId,
+                                  VariableId: val.VariableId,
+                                  Name: val.Name,
+                                  Unit: val.Unit
                                 } )
                               );	
-        console.log(`The Variable ids for ${pOi} = `, values)
+        console.log(`The Variable ids for ${iOp} = `, values)
         return values;
       }, function() {
         console.log('stuff failed')
       }); 
 
   }
-  
  
- getEnergy('inverter');
+  // takes array of variable ids
+  // returns array of data??
+  function getData(arr) {
+    //  console.log( 'Array input to callForVariables = ', arr);
+
+    const dataListURL = 'http://192.168.32.124:6600/api/DataList'
+    let requestData = {};
+    const Promises = arr.map( async variable => {
+      try { 
+        const variableIdResponse = await axios({
+          method: 'get',
+          url: dataListURL,
+          headers: { 'Authorization': authString },
+          params: {
+            datasourceId: variable.VariableId,
+            startDate: 1529452800,
+            endDate: 1529539200,
+            aggregationType: 0,
+            grouping: 'raw'
+          }
+        });
+        // TODO: take out?
+        if (variableIdResponse.data) return variableIdResponse.data;
+        
+      } catch (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log('\nError, request made, but server responded with ...', error.response.data);
+          console.log('\nError.response.status = ', error.response.status);
+          console.log('\nError.response.headers = ', error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received `error.request` is
+          // an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log('Error. Request made but no response recieved....', error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error in setting up request....', error.message);
+        }
+        // console.log('error.config = \n', error.config);
+      }
+    });
+    
+    return Promise.all(Promises)
+      .then((rawValues) => {
+        console.log('rawValues', rawValues)
+        let values = rawValues.filter( val => val);	
+        console.log('Array or engery datapoints = ', values)
+        return values;
+      }, function() {
+        console.log('stuff failed')
+      }); 
+
+  }
+ 
+
+// spits out array of objects that have variable ids
+//  ingestEnergy('inverter');
+
+ // spits out array of objects that have variable ids
+ ingestEnergy('plant');
