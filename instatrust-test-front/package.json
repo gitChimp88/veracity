@@ -26,10 +26,11 @@
     "react-scripts": "1.0.10"
   },
   "scripts": {
-    "start": "HTTPS=true && react-scripts start",
+    "startHttps": "HTTPS=true && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build && rm -rf ../instatrust-api/build && mv build ../instatrust-api/build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://localhost:3000"
+  "proxy": "https://localhost:3001"
 }

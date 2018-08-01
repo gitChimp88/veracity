@@ -218,8 +218,8 @@ app.post('/', (req, res, next) => {
     // parameter will be populated because we are signed in.
     /* in order to get the sessionid from the cookie this must match what you 
     registered with veracityh */
-    // res.redirect('https://localhost:3000/');
-    res.redirect('/');
+    res.redirect('https://localhost:3000/');
+    // res.redirect('/');
   }
 );
 // At this point we can use the information Azure B2C returned to us to
@@ -374,8 +374,23 @@ app.get('/api/services', helpers.ensureAuthenticated, (req, res) => {
 });
 
 
-app.use('/api1', helpers.ensureAuthenticated, api);
+// app.use('/api1', helpers.ensureAuthenticated, api);
+app.use('/api1', api); // with no authentication (unprotected)
 
+// with the router and route handler all in one
+app.get('/api1/heroes', (req, res) => {
+  // find all heroes from db
+  const docquery = Hero.find({}).read(ReadPreference.NEAREST);
+ // docquery in this example could be just a simple object that you return from   
+  docquery
+    .exec()
+    .then(heroes => {
+      res.json(heroes);
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+}
 app.get('*', (req, res, next) => {
   // res.sendFile('/public/index.html');
   const err = new Error(`Four OHH four! req.originalUrl = ${req.originalUrl}\n`);

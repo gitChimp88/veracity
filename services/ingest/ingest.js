@@ -69,9 +69,10 @@ const ingestEnergy = async (iOp) => {
        return tempObj;
       });
 
-      // this should be piped to the getData function
-      callForVariables(invertersArray, authString, variableIdURL, iOp)
-      getData();
+      // variablesArray become an array of objects which have a VariableId key
+      // in them
+      let variablesArray = await callForVariables(invertersArray, authString, variableIdURL, iOp)
+      getData(variablesArray, authString); // getData should pull data according to variableId
 
   } catch (error) {
       if (error.response) {
@@ -114,7 +115,7 @@ async function getBearerString (credsParam) {
 // function getDeviceParametersForIrradiance callForVariables(x, y, z)
 
 // takes array of object with parameters and info for elements, and returns array of variables
- function callForVariables(arr, authString, varUrlParam, iOp) {
+ async function callForVariables(arr, authString, varUrlParam, iOp) {
   //  console.log( 'Array input to callForVariables = ', arr);
    if (!['plant','inverter'].includes(iOp)) {
      console.error('You\'re using callForVariables wrong! It takes plant or string');
@@ -162,7 +163,6 @@ async function getBearerString (credsParam) {
       // console.log('error.config = \n', error.config);
     }
   });
-  
     return Promise.all(variableIdPromises)
       .then((rawValues) => {
         console.log('rawValues', rawValues)
@@ -170,7 +170,7 @@ async function getBearerString (credsParam) {
                               .map( val => ( {
                                   FacilityId: val.Key.FacilityId,
                                   DeviceId: val.Key.DeviceId,
-                                  VariableId: val.VariableId,
+                                  VariableId: val.Key.VariableId,
                                   Name: val.Name,
                                   Unit: val.Unit
                                 } )
@@ -180,14 +180,11 @@ async function getBearerString (credsParam) {
       }, function() {
         console.log('stuff failed')
       }); 
-
   }
- 
   // takes array of variable ids
   // returns array of data??
-  function getData(arr) {
+  function getData(arr, authString) {
     //  console.log( 'Array input to callForVariables = ', arr);
-
     const dataListURL = 'http://192.168.32.124:6600/api/DataList'
     let requestData = {};
     const Promises = arr.map( async variable => {
@@ -202,9 +199,18 @@ async function getBearerString (credsParam) {
             endDate: 1529539200,
             aggregationType: 0,
             grouping: 'raw'
-          }
+          },
+          transformResponse: axios.defaults.transformResponse.concat((data, headers) => {
+            console.log('data in transformResponse = ', data, 'headers = ', headers) // this should now be JSON
+            data.FacilityId = variable.FacilityId;
+            data.DeviceId = variable.DeviceId;
+            data.Name = variable.Name;
+            data.Unit = variable.Unit;
+            data.VariableId = variable.VariableId;
+          })
         });
-        // TODO: take out?
+        // TODO: take out? or build object, then return that object
+
         if (variableIdResponse.data) return variableIdResponse.data;
         
       } catch (error) {
@@ -231,17 +237,15 @@ async function getBearerString (credsParam) {
       .then((rawValues) => {
         console.log('rawValues', rawValues)
         let values = rawValues.filter( val => val);	
-        console.log('Array or engery datapoints = ', values)
+        console.log('Array of energy datapoints = ', values)
         return values;
       }, function() {
         console.log('stuff failed')
       }); 
-
   }
- 
 
 // spits out array of objects that have variable ids
-//  ingestEnergy('inverter');
+ ingestEnergy('inverter');
 
  // spits out array of objects that have variable ids
- ingestEnergy('plant');
+//  ingestEnergy('plant');

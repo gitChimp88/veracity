@@ -122,12 +122,13 @@ class Main extends Component {
             <div>
               <div>
                 <Link to="/">"/" Route Link</Link>
+                <Link to="/heroes">   /heroes</Link>
               </div>
               {this.state.authenticated ? (
                 <div className="links">
                   <Link to="/">   /homepage</Link>
                   <Link to="/dashboard">   /dashboard</Link>
-                  <Link to="/heros">   /heros</Link>
+                  <Link to="/heros">   /heroes</Link>
                   <Link to="/logout">    /logout</Link>
                 </div>
               ) : (
@@ -141,10 +142,11 @@ class Main extends Component {
 
             <PropsRoute exact path="/" component={HomePage} toggleAuthenticateStatus={this.toggleAuthenticateStatus} /> 
             <PrivateRoute path="/dashboard" component={DashboardPage}/> 
-            <PrivateRoute path="/heros" component={Heroes}/>
+            {/* <PrivateRoute path="/heroes" component={Heroes}/> */}
             <LoggedOutRoute path="/login" component={LoginPage} toggleAuthenticateStatus={this.toggleAuthenticateStatus} />
             <LoggedOutRoute path="/signup" component={SignUpPage}/>
             <Route path="/logout" component={LogoutFunction}/>
+            <Route path="/heroes" component={Heroes}/>
             
           </div>
 

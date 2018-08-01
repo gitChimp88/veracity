@@ -19,7 +19,16 @@ const heroesService = require('../controllers/hero-service');
 // -----------------------------------------------------
 // From react-cosmosdb
 router.get('/heroes', (req, res) => {
-  heroesService.get(req, res);
+  const docquery = Hero.find({}).read(ReadPreference.NEAREST);
+  docquery
+    .exec()
+    .then(heroes => {
+      res.json(heroes);
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+}
 });
 
 router.put('/hero', (req, res) => {
