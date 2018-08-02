@@ -28,7 +28,6 @@ router.get('/heroes', (req, res) => {
     .catch(err => {
       res.status(500).send(err);
     });
-}
 });
 
 router.put('/hero', (req, res) => {

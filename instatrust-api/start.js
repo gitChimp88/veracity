@@ -375,7 +375,7 @@ app.get('/api/services', helpers.ensureAuthenticated, (req, res) => {
 
 
 // app.use('/api1', helpers.ensureAuthenticated, api);
-app.use('/api1', api); // with no authentication (unprotected)
+//app.use('/api1', api); // with no authentication (unprotected)
 
 // with the router and route handler all in one
 app.get('/api1/heroes', (req, res) => {
@@ -413,3 +413,501 @@ app.use(expressWinston.errorLogger({
 // Finally start our server by calling the start function from server.js
 // -----------------------------------------------------------------------------
 start();
+
+
+
+
+// -----------------------------------------------------------------------------
+// Start of routes for assets
+// -----------------------------------------------------------------------------
+
+
+var fakeDb = [
+    {
+      _id: "45xr8",
+      asset: "171 MWp- 1 Axis Trackers- USA (California)",
+      size: "171",
+      location: "USA",
+      region: "California",
+      continent: "America",
+      mountingSystem: "1 Axis Tracker",
+      panelTech: "Polycrystalline",
+      COD: "2018",
+      startOfOperation: "04-20-2018",
+      pic: "SolarAssetPic",
+      peakPower: "171,720",
+      nominalPower: "132,500",
+      inverters: "106 x Power Electronics String Inverters 13,250 kVA",
+      trackers: "25,440 x First Solar trackers",
+      pvModules: "1,756,800 x First Solar 112kW Modules",
+      latitude: "41.390205",
+      longitude: "‎2.154007",
+      revenueStream: "PPA",
+      remainingYears: "10",
+      Irradiance: "1000 W/m^2",
+      timeZone: "(GMT-11:00) Pago Pago",
+      score: [{ performanceScore: "High", 
+      performanceRatio: "", availability: "", 
+      powerSteadiness: "", inverterReliability: "", repairResponsiveness: ""},
+      
+      {dataQualityScore: "High", dataAvailability: "", irradianceSensorsQuality: "", 
+      periodOfData: "", communicationReliability: ""}]
+  },
+  {
+    _id: "45xr9",
+    asset: "171 MWp- 1 Axis Trackers- USA (California)",
+    size: "171",
+    location: "USA",
+    region: "California",
+    continent: "America",
+    mountingSystem: "1 Axis Tracker",
+    panelTech: "Polycrystalline",
+    COD: "2018",
+    startOfOperation: "04-20-2018",
+    pic: "SolarAssetPic",
+    peakPower: "171,720",
+    nominalPower: "132,500",
+    inverters: "106 x Power Electronics String Inverters 13,250 kVA",
+    trackers: "25,440 x First Solar trackers",
+    pvModules: "1,756,800 x First Solar 112kW Modules",
+    latitude: "41.390205",
+    longitude: "‎2.154007",
+    revenueStream: "PPA",
+    remainingYears: "10",
+    Irradiance: "1000 W/m^2",
+    timeZone: "(GMT-11:00) Pago Pago",
+    visible: true,
+    score: [{ performanceScore: "High", 
+    performanceRatio: "", availability: "", 
+    powerSteadiness: "", inverterReliability: "", repairResponsiveness: ""},
+    
+    {dataQualityScore: "High", dataAvailability: "", irradianceSensorsQuality: "", 
+    periodOfData: "", communicationReliability: ""}]
+}
+]
+
+var fakeUserProfile = [
+  { _id: "324hff", favourites: [{_id:"45xr8"}, {_id:"45xr10"}] },
+]
+
+
+
+//Route for Marketplace page.
+
+/*
+
+Use this one once we have a database up and running
+would need to make an Assets schema in hero-model.js, export it and
+import to this file.
+
+
+app.get('/api1/allAssets', (req, res) => {
+  const docquery = Assets.find({}).read(ReadPreference.NEAREST);
+  docquery
+    .exec()
+    .then(assets => {
+      
+      var marketplaceAssetInfo = []
+      
+    assets.forEach(function(val, i){
+    
+    var individualAsset = new Object();
+    individualAsset._id = val._id
+    individualAsset.asset = val.asset
+    individualAsset.location = val.location
+    individualAsset.mountingSystem = val.mountingSystem
+    individualAsset.panelTech = val.panelTech
+    individualAsset.COD = val.COD
+    individualAsset.size = val.size
+    individualAsset.performanceScore = val.score[0].performanceScore
+    individualAsset.dataQualityScore = val.score[1].dataQualityScore
+    individualAsset.pic = val.pic
+    individualAsset.latitude = val.latitude
+    individualAsset.longitude = val.longitude
+    individualAsset.region = val.region
+
+    marketplaceAssetInfo.push(individualAsset)
+
+  })
+
+      res.json(marketplaceAssetInfo);
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+*/
+
+//test route (without link to a database)
+app.get('/api1/allAssets', (req, res) => {
+
+  /*
+   Will also need favourite information from users profile
+  */
+
+  var assets = fakeDb;
+  var response = []
+
+  var favourites = fakeUserProfile[0].favourites
+
+  assets.forEach(function(val, i){
+    /*Sort through all assets and return information needed*/
+    var individualAsset = new Object();
+    
+    favourites.indexOf(val._id) != -1 ? individualAsset.favourite = true : individualAsset.favourite = false;
+    individualAsset._id = val._id
+    individualAsset.asset = val.asset
+    individualAsset.location = val.location
+    individualAsset.mountingSystem = val.mountingSystem
+    individualAsset.panelTech = val.panelTech
+    individualAsset.COD = val.COD
+    individualAsset.size = val.size
+    individualAsset.performanceScore = val.score[0].performanceScore
+    individualAsset.dataQualityScore = val.score[1].dataQualityScore
+    individualAsset.pic = val.pic
+    individualAsset.latitude = val.latitude
+    individualAsset.longitude = val.longitude
+    individualAsset.region = val.region
+    individualAsset.continent = val.continent
+
+    response.push(individualAsset)
+
+  })
+      
+  res.json(response);
+   
+});
+
+//route for favourites
+
+/*
+Info needed for favourites -
+
+tags from users profile (under favourites)
+plant id from users profile (favourites)
+
+
+*/
+
+app.get('/api1/favourites', (req, res) => {
+
+  var assets = fakeDb;
+  var response = []
+  var favourites = fakeUserProfile[0].favourites
+
+  assets.forEach(function(val, i){
+    /*Sort through all assets and return information needed*/
+    var individualAsset = new Object();
+    if(favourites.indexOf(val._id) != -1){
+      individualAsset._id = val._id
+      individualAsset.asset = val.asset
+      individualAsset.location = val.location
+      individualAsset.mountingSystem = val.mountingSystem
+      individualAsset.panelTech = val.panelTech
+      individualAsset.COD = val.COD
+      individualAsset.size = val.size
+      individualAsset.performanceScore = val.score[0].performanceScore
+      individualAsset.dataQualityScore = val.score[1].dataQualityScore
+      individualAsset.latitude = val.latitude
+      individualAsset.longitude = val.longitude
+      individualAsset.region = val.region
+      individualAsset.continent = val.continent
+
+      response.push(individualAsset)
+    }
+   
+  })
+      
+  res.json(response);
+   
+});
+
+//route for My Assets
+
+/*
+
+Info needed for myAssets -
+
+Need users profile information to obtain plant id´s
+
+*/
+
+app.get('/api1/myAssets', (req, res) => {
+
+  var assets = fakeDb;
+  var response = []
+
+  assets.forEach(function(val, i){
+    /*Sort through all assets and return information needed*/
+    var individualAsset = new Object();
+    individualAsset._id = val._id
+    individualAsset.asset = val.asset
+    individualAsset.location = val.location
+    individualAsset.mountingSystem = val.mountingSystem
+    individualAsset.panelTech = val.panelTech
+    individualAsset.COD = val.COD
+    individualAsset.size = val.size
+    individualAsset.performanceScore = val.score[0].performanceScore
+    individualAsset.dataQualityScore = val.score[1].dataQualityScore
+    individualAsset.latitude = val.latitude
+    individualAsset.longitude = val.longitude
+    individualAsset.region = val.region
+    individualAsset.continent = val.continent
+    individualAsset.visible = val.visible
+
+    response.push(individualAsset)
+
+  })
+      
+  res.json(response);
+   
+});
+
+
+
+//route for Add asset (automatically add asset when selected)
+/*
+  Information for every input in the form
+
+  make sure apiary contains all of this information
+*/
+
+app.get('/api1/addAsset', (req, res) => {
+
+  var assets = fakeDb;
+  var response = []
+
+  assets.forEach(function(val, i){
+    /*Sort through all assets and return information needed*/
+    var individualAsset = new Object();
+    individualAsset._id = val._id
+    individualAsset.asset = val.asset
+    individualAsset.location = val.location
+    individualAsset.mountingSystem = val.mountingSystem
+    individualAsset.panelTech = val.panelTech
+    individualAsset.COD = val.COD
+    individualAsset.size = val.size
+    individualAsset.performanceScore = val.score[0].performanceScore
+    individualAsset.dataQualityScore = val.score[1].dataQualityScore
+    individualAsset.latitude = val.latitude
+    individualAsset.longitude = val.longitude
+    individualAsset.region = val.region
+    individualAsset.timeZone = val.timeZone
+    individualAsset.typeOfFacility = val.typeOfFacility
+
+    individualAsset.pvModuleTech = val.pvModuleTech
+    individualAsset.inverterTech = val.inverterTech
+    
+    individualAsset.irradianceSensor = val.irradianceSensor
+    individualAsset.pvModules = val.pvModules
+    individualAsset.inverter = val.inverter
+    individualAsset.mountingStructure = val.mountingStructure
+
+
+    response.push(individualAsset)
+
+  })
+      
+  res.json(response);
+   
+});
+
+
+//route for asset page
+
+  /*
+    Also need favourite info from users profile
+    and access to sellers contact details
+  */
+app.get('/api1/assetPage', (req, res) => {
+
+  var assets = fakeDb;
+  var response = []
+
+  var favourites = fakeUserProfile[0].favourites
+
+  assets.forEach(function(val, i){
+    /*Sort through all assets and return information needed*/
+    var individualAsset = new Object();
+
+    favourites.indexOf(val._id) != -1 ? individualAsset.favourite = true : individualAsset.favourite = false;
+    individualAsset._id = val._id
+    individualAsset.asset = val.asset
+    individualAsset.pic = val.pic
+    individualAsset.location = val.location
+    individualAsset.mountingSystem = val.mountingSystem
+    individualAsset.performanceScore = val.score[0].performanceScore
+    individualAsset.performanceRatio = val.score[0].performanceRatio
+    individualAsset.availability = val.score[0].availability
+    individualAsset.powerSteadiness = val.score[0].powerSteadiness
+    individualAsset.inverterReliability = val.score[0].inverterReliability
+    individualAsset.repairResponsiveness = val.score[0].repairResponsiveness
+    individualAsset.dataQualityScore = val.score[1].dataQualityScore
+    individualAsset.dataAvailability = val.score[1].dataavailability
+    individualAsset.irradianceSensorsQuality = val.score[1].irradianceSensorsQuality
+    individualAsset.periodOfData = val.score[1].periodOfData
+    individualAsset.communicationReliability = val.score[1].communicationReliability
+    individualAsset.startOfOperation = val.startOfOperation
+    individualAsset.peakPower = val.peakPower
+    individualAsset.nominalPower = val.nominalPower
+    individualAsset.revenueStream = val.revenueStream
+    individualAsset.irradiance = val.irradiance
+    individualAsset.inverters = val.inverters
+    individualAsset.trackers = val.trackers
+    individualAsset.remainingYears = val.remainingYears
+    individualAsset.pvModules = val.pvModules
+    individualAsset.latitude = val.latitude
+    individualAsset.longitude = val.longitude
+    
+
+    response.push(individualAsset)
+
+  })
+      
+  res.json(response);
+   
+});
+
+
+
+//route for benchmark page
+
+    /*
+    We also need the below -
+
+    favourite Info from users profile
+    access to sellers contact details
+    */
+
+app.get('/api1/benchmark', (req, res) => {
+
+  var assets = fakeDb;
+  var response = []
+  var favourites = fakeUserProfile[0].favourites
+
+  assets.forEach(function(val, i){
+    /*Sort through all assets and return information needed*/
+    var individualAsset = new Object();
+    favourites.indexOf(val._id) != -1 ? individualAsset.favourite = true : individualAsset.favourite = false;
+      individualAsset._id = val._id
+      individualAsset.region = val.region
+      individualAsset.location = val.location
+      individualAsset.typeOfFacility = val.typeOfFacility
+      individualAsset.size = val.size
+
+      individualAsset.performanceScore = val.score[0].performanceScore
+      individualAsset.performanceRatio = val.score[0].performanceRatio
+      individualAsset.availability = val.score[0].availability
+      individualAsset.powerSteadiness = val.score[0].powerSteadiness
+      individualAsset.inverterReliability = val.score[0].inverterReliability
+      individualAsset.repairResponsiveness = val.score[0].repairResponsiveness
+      individualAsset.dataQualityScore = val.score[1].dataQualityScore
+      individualAsset.dataAvailability = val.score[1].dataavailability
+      individualAsset.irradianceSensorsQuality = val.score[1].irradianceSensorsQuality
+      individualAsset.periodOfData = val.score[1].periodOfData
+      individualAsset.communicationReliability = val.score[1].communicationReliability
+
+    /*
+      Lifetime performance ratio?
+      Lifetime availability?
+    */
+    response.push(individualAsset)
+
+  })
+      
+  res.json(response);
+   
+});
+
+
+
+
+
+/* 
+****START OF ROUTES FOR PPA MARKETPLACE****
+*/
+
+/*
+Route for ppa marketplace - 
+
+_id
+asset
+location
+technology
+expectedProduction
+COD
+size
+score
+latitude
+longitude
+region
+continent
+
+(favourite info from users profile)
+*/
+
+
+
+
+/*
+Route for ppaFavourites
+
+
+
+_id
+asset
+size
+location
+mountingSystem
+panelTech
+COD
+score
+latitude
+longitude
+region
+technology
+expectedProduction
+
+(favourite info from users profile)
+
+*/
+
+/*
+Route for Ppa assetPage
+
+access to sellers contact details
+favourite info from users profile
+
+_id
+asset
+pic
+
+score 
+additionalityScore
+scheduleScore
+locationScore
+productionScore
+vppaHedgeScore
+
+interconnectionScore
+feasibilityScore
+permittingScore
+technologyScore
+siteControlScore
+
+asset details (hasnt been added to design yet)
+
+latitude
+longitude
+
+
+*/
+
+
+
+
+
+
+
+
+
