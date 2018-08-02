@@ -487,7 +487,7 @@ var fakeDb = [
 ]
 
 var fakeUserProfile = [
-  { _id: "324hff", favourites: [{_id:"45xr8"}, {_id:"45xr10"}] },
+  { _id: "324hff", favourites: ["45xr8", "45xr10"] },
 ]
 
 
